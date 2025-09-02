@@ -1,14 +1,3 @@
----
-
-# 📄 README.md
-
-````markdown
-# Taobao Global Go SDK
-
-基于 **Go 语言** 编写的淘宝全球开放平台 SDK，支持 **AccessToken 管理** 和 **商品搜索 API**，帮助开发者快速接入。
-
----
-
 ## 🚀 功能特性
 
 - ✅ `TokenService.Create` 获取 `access_token`
