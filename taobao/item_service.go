@@ -70,3 +70,33 @@ func joinStrings(arr []string, sep string) string {
 	}
 	return out
 }
+
+// GetDetail 获取商品详情
+func (s *ItemService) GetDetail(req types.ItemDetailRequest, accessToken string) (*types.ItemDetailResponse, error) {
+	params := map[string]string{
+		"access_token":  accessToken,
+		"item_resource": req.ItemResource,
+		"item_id":       req.ItemID,
+	}
+
+	if len(req.IncludeTags) > 0 {
+		params["include_tags"] = joinStrings(req.IncludeTags, ",")
+	}
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiQueryAllProduct
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.ItemDetailResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
