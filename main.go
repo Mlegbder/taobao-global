@@ -11,10 +11,8 @@ import (
 
 // main 函数选择要执行的示例
 func main() {
+	// 获取客户端
 	client, accessToken := getClient()
-	fmt.Println(client)
-	fmt.Printf("✅ 获取 access_token : %s\n", accessToken)
-	// 可以根据需要取消注释要运行的示例
 
 	// 关键词查询商品
 	// runItemSearch(client, accessToken)
@@ -36,6 +34,12 @@ func main() {
 
 	// 查询采购单物流详情
 	// runGetLogisticsDetail(client, accessToken)
+
+	//图片上传
+	// runImageUpload(client, accessToken)
+
+	// 图片搜索
+	runImgSearch(client, accessToken)
 }
 
 // ========== 示例函数们 ==========
@@ -204,6 +208,50 @@ func runGetLogisticsDetail(client *taobao.Client, accessToken string) {
 		}
 	} else {
 		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
+	}
+}
+
+// 图片上传
+func runImageUpload(client *taobao.Client, accessToken string) {
+	// 假设你已经把图片转成 Base64 字符串
+	imgBase64 := "UklGRpxpAgBXRUJQVlA4WAoAAAAgAAAArwQArwQASUND..."
+
+	req := types.ImageUploadRequest{
+		ImageBase64: imgBase64,
+	}
+
+	resp, err := client.Upload.Image(req, accessToken)
+	if err != nil {
+		log.Fatalf("❌ 图片上传失败: %v", err)
+	}
+
+	if resp.Data != nil {
+		fmt.Printf("✅ 图片上传成功, ImageID: %s\n", resp.Data.ImageID)
+	} else {
+		fmt.Printf("❌ 上传失败: %s (%s)\n", resp.BizErrorMsg, resp.BizErrorCode)
+	}
+}
+
+// 图片搜索
+func runImgSearch(client *taobao.Client, accessToken string) {
+	// 用 image_id 搜索 (推荐：先调用 ImageUpload 上传图片获取 image_id)
+	req := types.ImgSearchRequest{
+		ImageID:  "1521908561144519126",
+		Language: "en",
+	}
+
+	resp, err := client.Item.ImgSearch(req, accessToken)
+	if err != nil {
+		log.Fatalf("❌ 图片搜索失败: %v", err)
+	}
+
+	if len(resp.Data) > 0 {
+		fmt.Printf("✅ 找到 %d 个商品\n", len(resp.Data))
+		for _, item := range resp.Data {
+			fmt.Printf("- %s (ID: %d, 价格: %s 元)\n", item.Title, item.ItemID, item.Price)
+		}
+	} else {
+		fmt.Println("未找到相关商品")
 	}
 }
 
