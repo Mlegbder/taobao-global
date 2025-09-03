@@ -133,3 +133,28 @@ func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest, acce
 	}
 	return &resp, nil
 }
+
+// BatchPay 批量支付采购订单
+func (s *OrderService) BatchPay(req types.BatchPayPurchaseOrderRequest, accessToken string) (*types.BatchPayPurchaseOrderResponse, error) {
+	// 将数组序列化成 JSON 字符串
+	b, _ := json.Marshal(req.PurchaseOrderIDList)
+
+	params := map[string]string{
+		"access_token":        accessToken,
+		"purchaseOrderIdList": string(b),
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiPurchaseOrderBatchPay
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.BatchPayPurchaseOrderResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}

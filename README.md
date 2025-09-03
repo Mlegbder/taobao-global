@@ -110,6 +110,7 @@ func main() {
 │   ├── client.go          # Client 主入口
 │   ├── item_service.go    # 商品搜索服务
 │   └── token_service.go   # Token 管理服务
+│   └── order_service.go   # 订单服务
 │   └── ....go   # 其他请求服务
 ├── types/                 # 请求/响应数据类型
 │   ├── base.go

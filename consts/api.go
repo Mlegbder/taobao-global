@@ -20,8 +20,7 @@ const (
 	TaoBaoApiPurchaseOrderRender    = "/purchase/order/render"              // 订单预览接口 https://open.taobao.global/doc/api.htm?spm=panama_open.panama_open_home.0.0.753123f9VwZCVc#/api?cid=16&path=/purchase/order/render&methodType=GET/POST
 	TaoBaoApiCreatePurchaseOrder    = "/purchase/order/create"              // 创建订单接口 https://open.taobao.global/doc/api.htm?spm=panama_open.panama_open_home.0.0.753123f9VwZCVc#/api?cid=16&path=/purchase/order/create&methodType=POST
 	TaoBaoApiQueryPurchaseOrders    = "/purchase/order/query"               // 查询订单接口
-	TaoBaoApiGetPayUrl              = "/purchase/order/getPayUrl"           // 获取支付链接接口
-	TaoBaoApiPurchaseOrderBatchPay  = "/purchase/order/batch/pay"           // 批量支付接口
+	TaoBaoApiPurchaseOrderBatchPay  = "/purchase/order/batch/pay"           // 批量支付接口 https://open.taobao.global/doc/api.htm?spm=a2o9m.11193531.0.0.2d4a5288j6INTs#/api?cid=16&path=/purchase/order/batch/pay&methodType=GET/POST
 	TaoBaoApiOrderConfirmReceipt    = "/purchase/order/confirm/receipt"     // 确认收货接口
 	TaoBaoApiEstimateExpressFreight = "/logistics/express/freight/estimate" // 预估快递运费接口
 	TaoBaoApiOrderCancel            = "/purchase/order/asyn/cancel"         //取消采购单 https://open.taobao.global/doc/api.htm?spm=panama_open.panama_open_home.0.0.753123f9VwZCVc#/api?cid=16&path=/purchase/order/asyn/cancel&methodType=GET/POST

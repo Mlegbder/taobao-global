@@ -15,11 +15,23 @@ func main() {
 
 	// 可以根据需要取消注释要运行的示例
 
+	// 关键词查询商品
 	// runItemSearch(client, accessToken)
+
+	// 获取商品详情
 	// runItemDetail(client, accessToken)
+
+	// 订单预览
 	// runOrderPreview(client, accessToken)
-	runCreateOrder(client, accessToken)
-	// runCancelOrder(client, accessToken)
+
+	// 创建采购单
+	// runCreateOrder(client, accessToken)
+
+	// 取消采购单
+	runCancelOrder(client, accessToken)
+
+	// 批量支付
+	// runBatchPay(client, accessToken)
 }
 
 // ========== 示例函数们 ==========
@@ -126,10 +138,32 @@ func runCreateOrder(client *taobao.Client, accessToken string) {
 	}
 }
 
+// 批量支付
+func runBatchPay(client *taobao.Client, accessToken string) {
+	req := types.BatchPayPurchaseOrderRequest{
+		PurchaseOrderIDList: []int64{202509020001, 202509020002}, //采购IDS
+	}
+
+	resp, err := client.Order.BatchPay(req, accessToken)
+	if err != nil {
+		log.Fatalf("batch pay failed: %v", err)
+	}
+
+	if resp.Success {
+		fmt.Println("✅ 批量支付任务已提交")
+		fmt.Println("待支付订单: ", resp.Data.WillPayPurchaseOrderIDs)
+		if len(resp.Data.PayFailurePurchaseOrderIDs) > 0 {
+			fmt.Println("❌ 支付失败订单: ", resp.Data.PayFailurePurchaseOrderIDs)
+		}
+	} else {
+		fmt.Printf("❌ 批量支付失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
+	}
+}
+
 // 取消采购单
 func runCancelOrder(client *taobao.Client, accessToken string) {
 	req := types.AsynCancelPurchaseOrderRequest{
-		PurchaseID:   "202509020001", // 替换成真实采购单号
+		PurchaseID:   "200077684761", // 替换成真实采购单号
 		CancelReason: "Customer requested cancellation",
 		CancelRemark: "测试取消订单",
 	}
