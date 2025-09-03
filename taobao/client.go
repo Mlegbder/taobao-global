@@ -12,6 +12,7 @@ type Client struct {
 	Item      *ItemService
 	Order     *OrderService
 	Logistics *LogisticsService
+	Upload    *UploadService
 }
 
 // NewClient 创建一个新客户端
@@ -27,5 +28,7 @@ func NewClient(appKey, appSecret string) *Client {
 	client.Item = &ItemService{client: client}
 	client.Order = &OrderService{client: client}
 	client.Logistics = &LogisticsService{client: client}
+	client.Upload = &UploadService{client: client}
+
 	return client
 }

@@ -100,3 +100,37 @@ func (s *ItemService) GetDetail(req types.ItemDetailRequest, accessToken string)
 	}
 	return &resp, nil
 }
+
+// ImgSearch 图片搜索
+func (s *ItemService) ImgSearch(req types.ImgSearchRequest, accessToken string) (*types.ImgSearchResponse, error) {
+	params := map[string]string{
+		"access_token": accessToken,
+	}
+
+	if req.PicURL != "" {
+		params["pic_url"] = req.PicURL
+	}
+	if len(req.IncludeTags) > 0 {
+		params["include_tags"] = joinStrings(req.IncludeTags, ",")
+	}
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+	if req.ImageID != "" {
+		params["image_id"] = req.ImageID
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiImgSearch
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.ImgSearchResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
