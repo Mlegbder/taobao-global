@@ -2,6 +2,7 @@
 
 - ✅ `TokenService.Create` 获取 `access_token`
 - ✅ `ItemService.Search` 商品搜索
+- ✅ `...` 更多接口引入SDK查看
 - ✅ 参数自动签名（HMAC-SHA256）
 - ✅ 强类型 Request/Response，IDE 自动补全
 - ✅ 支持手动传入 `access_token`，方便多账号/缓存管理
@@ -109,10 +110,12 @@ func main() {
 │   ├── client.go          # Client 主入口
 │   ├── item_service.go    # 商品搜索服务
 │   └── token_service.go   # Token 管理服务
+│   └── ....go   # 其他请求服务
 ├── types/                 # 请求/响应数据类型
 │   ├── base.go
 │   ├── item_search.go
 │   └── token.go
+│   └── ....go   # 其他请求数据类型
 └── utils/                 # 工具方法
     └── taobao_util.go     # 签名 & HTTP 请求
 ```
@@ -128,7 +131,7 @@ func main() {
 
 2. **Token 生命周期**
 
-    * `access_token` 有效期为 **30 天**。
+    * `access_token` 有效期为 **30 天**, `refresh_token` 有效期为 **60 天**。
     * 过期后可用 `refresh_token` 获取新的 `access_token`。
 
 3. **请求签名**

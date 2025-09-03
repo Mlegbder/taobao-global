@@ -102,3 +102,34 @@ func (s *OrderService) Create(req types.CreatePurchaseOrderRequest, accessToken 
 	}
 	return &resp, nil
 }
+
+// AsynCancel 异步取消采购订单
+func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest, accessToken string) (*types.AsynCancelPurchaseOrderResponse, error) {
+	params := map[string]string{
+		"access_token":  accessToken,
+		"purchase_id":   req.PurchaseID,
+		"cancel_reason": req.CancelReason,
+	}
+
+	if len(req.SubPurchaseOrderIDs) > 0 {
+		b, _ := json.Marshal(req.SubPurchaseOrderIDs)
+		params["sub_purchase_orderId_list"] = string(b)
+	}
+	if req.CancelRemark != "" {
+		params["cancel_remark"] = req.CancelRemark
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = "/purchase/order/asyn/cancel"
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.AsynCancelPurchaseOrderResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
