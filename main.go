@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/Mlegbder/taobao-global/taobao"
+	"github.com/Mlegbder/taobao-global/types"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"taobao-global/taobao"
-	"taobao-global/types"
 )
 
 // main 函数选择要执行的示例

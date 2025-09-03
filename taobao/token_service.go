@@ -2,9 +2,9 @@ package taobao
 
 import (
 	"encoding/json"
-	"taobao-global/consts"
-	"taobao-global/types"
-	"taobao-global/utils"
+	"github.com/Mlegbder/taobao-global/consts"
+	"github.com/Mlegbder/taobao-global/types"
+	"github.com/Mlegbder/taobao-global/utils"
 )
 
 // TokenService 提供 Token 相关的 API 封装

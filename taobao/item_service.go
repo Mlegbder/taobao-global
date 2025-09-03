@@ -2,10 +2,10 @@ package taobao
 
 import (
 	"encoding/json"
+	"github.com/Mlegbder/taobao-global/consts"
+	"github.com/Mlegbder/taobao-global/types"
+	"github.com/Mlegbder/taobao-global/utils"
 	"strconv"
-	"taobao-global/consts"
-	"taobao-global/types"
-	"taobao-global/utils"
 )
 
 // ItemService 提供商品相关 API

@@ -1,8 +1,8 @@
 package taobao
 
 import (
-	"taobao-global/consts"
-	"taobao-global/types"
+	"github.com/Mlegbder/taobao-global/consts"
+	"github.com/Mlegbder/taobao-global/types"
 )
 
 // Client SDK 主入口

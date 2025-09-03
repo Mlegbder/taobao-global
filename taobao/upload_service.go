@@ -2,9 +2,9 @@ package taobao
 
 import (
 	"encoding/json"
-	"taobao-global/consts"
-	"taobao-global/types"
-	"taobao-global/utils"
+	"github.com/Mlegbder/taobao-global/consts"
+	"github.com/Mlegbder/taobao-global/types"
+	"github.com/Mlegbder/taobao-global/utils"
 )
 
 // UploadService 提供上传相关API
