@@ -1,6 +1,7 @@
 package taobao
 
 import (
+	"taobao-global/consts"
 	"taobao-global/types"
 )
 
@@ -9,6 +10,7 @@ type Client struct {
 	Base  types.TaobaoBase
 	Token *TokenService
 	Item  *ItemService
+	Order *OrderService
 }
 
 // NewClient 创建一个新客户端
@@ -16,12 +18,12 @@ func NewClient(appKey, appSecret string) *Client {
 	baseConf := types.TaobaoBase{
 		AppKey:    appKey,
 		AppSecret: appSecret,
-		Api:       "https://api.taobao.global/rest",
+		Api:       consts.BaseApi,
 	}
 
 	client := &Client{Base: baseConf}
 	client.Token = &TokenService{client: client}
 	client.Item = &ItemService{client: client}
-
+	client.Order = &OrderService{client: client}
 	return client
 }

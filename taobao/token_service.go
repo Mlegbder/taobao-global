@@ -32,3 +32,24 @@ func (t *TokenService) Create(req types.TokenRequest) (*types.TokenResponse, err
 	}
 	return &resp, nil
 }
+
+// Refresh 刷新 AccessToken
+func (t *TokenService) Refresh(req types.RefreshTokenRequest) (*types.RefreshTokenResponse, error) {
+	params := map[string]string{
+		"refresh_token": req.RefreshToken,
+	}
+
+	baseConf := t.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiRefreshAccessToken
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.RefreshTokenResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
