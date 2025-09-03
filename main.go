@@ -32,6 +32,9 @@ func main() {
 
 	// 批量支付
 	// runBatchPay(client, accessToken)
+
+	// 查询采购单物流详情
+	// runGetLogisticsDetail(client, accessToken)
 }
 
 // ========== 示例函数们 ==========
@@ -175,6 +178,31 @@ func runCancelOrder(client *taobao.Client, accessToken string) {
 		fmt.Println("✅ 取消订单请求已发起 (异步)，请调用 /purchase/orders/query 查询最终状态")
 	} else {
 		fmt.Printf("❌ 取消订单失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
+	}
+}
+
+// 查询采购单物流详情
+func runGetLogisticsDetail(client *taobao.Client, accessToken string) {
+	req := types.GetLogisticsDetailRequest{
+		PurchaseOrderLineID: 1234567890, // 子单号
+	}
+
+	resp, err := client.Logistics.GetDetail(req, accessToken)
+	if err != nil {
+		log.Fatalf("get logistics detail failed: %v", err)
+	}
+
+	if resp.Success {
+		fmt.Printf("✅ 当前物流状态: %s (%s)\n", resp.Data.LogisticsDesc, resp.Data.LogisticsStatus)
+		for _, pkg := range resp.Data.PnmLogisticsDetails {
+			fmt.Printf("📦 包裹单号: %s\n", pkg.MailNo)
+			for _, trace := range pkg.LogisticsTraces {
+				fmt.Printf("   [%s] %s - %s (%s)\n",
+					trace.Time, trace.Status, trace.StatusDesc, trace.City)
+			}
+		}
+	} else {
+		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
 	}
 }
 

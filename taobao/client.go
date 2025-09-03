@@ -7,10 +7,11 @@ import (
 
 // Client SDK 主入口
 type Client struct {
-	Base  types.TaobaoBase
-	Token *TokenService
-	Item  *ItemService
-	Order *OrderService
+	Base      types.TaobaoBase
+	Token     *TokenService
+	Item      *ItemService
+	Order     *OrderService
+	Logistics *LogisticsService
 }
 
 // NewClient 创建一个新客户端
@@ -25,5 +26,6 @@ func NewClient(appKey, appSecret string) *Client {
 	client.Token = &TokenService{client: client}
 	client.Item = &ItemService{client: client}
 	client.Order = &OrderService{client: client}
+	client.Logistics = &LogisticsService{client: client}
 	return client
 }

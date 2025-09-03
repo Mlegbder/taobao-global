@@ -120,7 +120,7 @@ func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest, acce
 	}
 
 	baseConf := s.client.Base
-	baseConf.ApiEndpoint = "/purchase/order/asyn/cancel"
+	baseConf.ApiEndpoint = consts.TaoBaoApiOrderCancel
 
 	respBytes, err := utils.Execute(params, baseConf)
 	if err != nil {
