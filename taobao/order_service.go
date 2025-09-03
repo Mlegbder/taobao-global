@@ -158,3 +158,50 @@ func (s *OrderService) BatchPay(req types.BatchPayPurchaseOrderRequest, accessTo
 	}
 	return &resp, nil
 }
+
+// Query 采购订单查询
+func (s *OrderService) Query(req types.QueryPurchaseOrdersRequest, accessToken string) (*types.QueryPurchaseOrdersResponse, error) {
+	params := map[string]string{
+		"access_token": accessToken,
+	}
+
+	if req.Status != "" {
+		params["status"] = req.Status
+	}
+	if req.SortType != "" {
+		params["sort_type"] = req.SortType
+	}
+	if req.PageNo > 0 {
+		params["page_no"] = strconv.Itoa(req.PageNo)
+	}
+	if req.PageSize > 0 {
+		params["page_size"] = strconv.Itoa(req.PageSize)
+	}
+	if req.ModifyTimeStart > 0 {
+		params["modify_time_start"] = strconv.FormatInt(req.ModifyTimeStart, 10)
+	}
+	if req.ModifyTimeEnd > 0 {
+		params["modify_time_end"] = strconv.FormatInt(req.ModifyTimeEnd, 10)
+	}
+	if req.OuterPurchaseID != "" {
+		params["outer_purchase_id"] = req.OuterPurchaseID
+	}
+	if len(req.PurchaseIDS) > 0 {
+		b, _ := json.Marshal(req.PurchaseIDS)
+		params["purchase_ids"] = string(b)
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiOrdersQuery
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.QueryPurchaseOrdersResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}

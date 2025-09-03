@@ -35,11 +35,14 @@ func main() {
 	// 查询采购单物流详情
 	// runGetLogisticsDetail(client, accessToken)
 
+	// 查询采购单
+	runQueryPurchaseOrders(client, accessToken)
+
 	//图片上传
 	// runImageUpload(client, accessToken)
 
 	// 图片搜索
-	runImgSearch(client, accessToken)
+	//runImgSearch(client, accessToken)
 }
 
 // ========== 示例函数们 ==========
@@ -209,6 +212,39 @@ func runGetLogisticsDetail(client *taobao.Client, accessToken string) {
 	} else {
 		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
 	}
+}
+
+// 查询采购单
+func runQueryPurchaseOrders(client *taobao.Client, accessToken string) {
+	req := types.QueryPurchaseOrdersRequest{
+		PurchaseIDS: []int64{200077684761}, // 采购单ID
+		PageNo:      1,
+		PageSize:    10,
+	}
+
+	resp, err := client.Order.Query(req, accessToken)
+	if err != nil {
+		log.Fatalf("❌ 查询采购单失败: %v", err)
+	}
+
+	if resp.Success {
+		fmt.Printf("✅ 共查询到 %d 个采购单\n", resp.Data.ResultsTotal)
+		for _, order := range resp.Data.PurchaseOrders {
+			fmt.Printf("📦 主单ID: %d, 状态: %s, 金额: %.2f %s\n",
+				order.PurchaseID,
+				order.Status,
+				float64(order.PurchaseAmount)/100,
+				order.PurchaseCurrency,
+			)
+			for _, sub := range order.SubPurchaseOrders {
+				fmt.Printf("   - 子单ID: %d, 商品: %s, 数量: %d, 状态: %s\n",
+					sub.SubPurchaseOrderID, sub.Title, sub.Quantity, sub.Status)
+			}
+		}
+	} else {
+		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
+	}
+
 }
 
 // 图片上传
