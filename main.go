@@ -12,7 +12,8 @@ import (
 // main 函数选择要执行的示例
 func main() {
 	client, accessToken := getClient()
-
+	fmt.Println(client)
+	fmt.Printf("✅ 获取 access_token : %s\n", accessToken)
 	// 可以根据需要取消注释要运行的示例
 
 	// 关键词查询商品
@@ -28,7 +29,7 @@ func main() {
 	// runCreateOrder(client, accessToken)
 
 	// 取消采购单
-	runCancelOrder(client, accessToken)
+	//runCancelOrder(client, accessToken)
 
 	// 批量支付
 	// runBatchPay(client, accessToken)
