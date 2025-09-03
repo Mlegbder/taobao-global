@@ -1,7 +1,6 @@
 package taobao
 
 import (
-	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
 )
 
@@ -16,11 +15,11 @@ type Client struct {
 }
 
 // NewClient 创建一个新客户端
-func NewClient(appKey, appSecret string) *Client {
+func NewClient(baseApi, appKey, appSecret string) *Client {
 	baseConf := types.TaobaoBase{
 		AppKey:    appKey,
 		AppSecret: appSecret,
-		Api:       consts.BaseApi,
+		Api:       baseApi,
 	}
 
 	client := &Client{Base: baseConf}

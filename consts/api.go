@@ -6,8 +6,6 @@ package consts
 //https://api.taobao.global/oauth/authorize?response_type=code&redirect_uri=${redirect_uri}&force_auth=true&client_id=${appkey}
 //注意：请将「appkey」及「redirect_url」替换为您的开发者应用程式配置。
 const (
-	BaseApi = "https://api.taobao.global/rest"
-
 	// 鉴权相关接口
 	TaoBaoApiSignMethod          = "sha256"              // 签名方式：采用SHA-256算法进行签名
 	TaoBaoApiRefreshAccessToken  = "/auth/token/refresh" // 刷新访问令牌接口 https://open.taobao.global/doc/api.htm?spm=a2o9m.11193531.0.0.7b545288cD0hQP#/api?cid=8&path=/auth/token/refresh&methodType=GET/POST

@@ -9,6 +9,10 @@ import (
 	"os"
 )
 
+const (
+	BaseApi = "https://api.taobao.global/rest"
+)
+
 // main 函数选择要执行的示例
 func main() {
 	// 获取客户端
@@ -308,6 +312,6 @@ func getClient() (*taobao.Client, string) {
 		log.Fatal("❌ TAOBAO_APP_KEY / TAOBAO_APP_SECRET / TAOBAO_ACCESS_TOKEN is not set")
 	}
 
-	client := taobao.NewClient(appKey, appSecret)
+	client := taobao.NewClient(BaseApi, appKey, appSecret)
 	return client, accessToken
 }
