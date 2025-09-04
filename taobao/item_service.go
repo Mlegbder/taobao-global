@@ -72,10 +72,13 @@ func joinStrings(arr []string, sep string) string {
 }
 
 // GetDetail 获取商品详情
-func (s *ItemService) GetDetail(req types.ItemDetailRequest, accessToken string) (*types.ItemDetailResponse, error) {
+func (s *ItemService) GetDetail(req types.QueryAllProductRequest, accessToken string) (*types.QueryAllProductResponse, error) {
 	params := map[string]string{
 		"access_token": accessToken,
 		"item_id":      req.ItemID,
+	}
+	if req.ItemSourceMarket != "" {
+		params["item_source_market"] = req.ItemSourceMarket
 	}
 
 	baseConf := s.client.Base
@@ -86,7 +89,7 @@ func (s *ItemService) GetDetail(req types.ItemDetailRequest, accessToken string)
 		return nil, err
 	}
 
-	var resp types.ItemDetailResponse
+	var resp types.QueryAllProductResponse
 	if err = json.Unmarshal(respBytes, &resp); err != nil {
 		return nil, err
 	}

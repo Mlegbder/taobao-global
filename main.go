@@ -22,10 +22,10 @@ func main() {
 	// runItemSearch(client, accessToken)
 
 	// 获取商品详情
-	//runItemDetail(client, accessToken)
+	// runItemDetail(client, accessToken)
 
 	// 获取商品翻译
-	runItemTranslate(client, accessToken)
+	// runItemTranslate(client, accessToken)
 
 	// 订单预览
 	// runOrderPreview(client, accessToken)
@@ -34,7 +34,7 @@ func main() {
 	// runCreateOrder(client, accessToken)
 
 	// 取消采购单
-	//runCancelOrder(client, accessToken)
+	runCancelOrder(client, accessToken)
 
 	// 批量支付
 	// runBatchPay(client, accessToken)
@@ -73,10 +73,10 @@ func runItemSearch(client *taobao.Client, accessToken string) {
 func runItemDetail(client *taobao.Client, accessToken string) {
 	req := types.ItemDetailRequest{
 		ItemResource: "taobao",
-		ItemID:       "956575770963",
+		ItemID:       "778127375879",
 		Language:     "en",
 	}
-	resp, err := client.Item.GetDetail(req, accessToken)
+	resp, err := client.Item.GetSourceItemDetail(req, accessToken)
 	if err != nil {
 		log.Fatalf("❌ 商品详情获取失败: %v", err)
 	}
@@ -138,7 +138,7 @@ func runOrderPreview(client *taobao.Client, accessToken string) {
 // 创建采购单
 func runCreateOrder(client *taobao.Client, accessToken string) {
 	req := types.CreatePurchaseOrderRequest{
-		OuterPurchaseID: "ISV123456789",
+		OuterPurchaseID: "ISV4123456789",
 		PurchaseAmount:  199600, // 单位: 分
 		OrderLineList: `[{
 			"item_id": "4096526553499286", 
@@ -203,7 +203,7 @@ func runBatchPay(client *taobao.Client, accessToken string) {
 // 取消采购单
 func runCancelOrder(client *taobao.Client, accessToken string) {
 	req := types.AsynCancelPurchaseOrderRequest{
-		PurchaseID:   "200077684761", // 替换成真实采购单号
+		PurchaseID:   "200077821489", // 替换成真实采购单号
 		CancelReason: "Customer requested cancellation",
 		CancelRemark: "测试取消订单",
 	}
