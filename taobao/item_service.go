@@ -74,6 +74,28 @@ func joinStrings(arr []string, sep string) string {
 // GetDetail 获取商品详情
 func (s *ItemService) GetDetail(req types.ItemDetailRequest, accessToken string) (*types.ItemDetailResponse, error) {
 	params := map[string]string{
+		"access_token": accessToken,
+		"item_id":      req.ItemID,
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiQueryAllProduct
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.ItemDetailResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// GetSourceItemDetail 获取商品详情
+func (s *ItemService) GetSourceItemDetail(req types.ItemDetailRequest, accessToken string) (*types.ItemDetailResponse, error) {
+	params := map[string]string{
 		"access_token":  accessToken,
 		"item_resource": req.ItemResource,
 		"item_id":       req.ItemID,
@@ -87,7 +109,7 @@ func (s *ItemService) GetDetail(req types.ItemDetailRequest, accessToken string)
 	}
 
 	baseConf := s.client.Base
-	baseConf.ApiEndpoint = consts.TaoBaoApiQueryAllProduct
+	baseConf.ApiEndpoint = consts.TaoBaoApiSourceItemDetail
 
 	respBytes, err := utils.Execute(params, baseConf)
 	if err != nil {
@@ -129,6 +151,31 @@ func (s *ItemService) ImgSearch(req types.ImgSearchRequest, accessToken string) 
 	}
 
 	var resp types.ImgSearchResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// Translate 商品信息翻译
+func (s *ItemService) Translate(req types.ProductTranslateRequest, accessToken string) (*types.ProductTranslateResponse, error) {
+	params := map[string]string{
+		"access_token": accessToken,
+		"item_id":      req.ItemID,
+	}
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiProductInfoTran
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.ProductTranslateResponse
 	if err = json.Unmarshal(respBytes, &resp); err != nil {
 		return nil, err
 	}

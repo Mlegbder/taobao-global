@@ -22,7 +22,10 @@ func main() {
 	// runItemSearch(client, accessToken)
 
 	// 获取商品详情
-	// runItemDetail(client, accessToken)
+	//runItemDetail(client, accessToken)
+
+	// 获取商品翻译
+	runItemTranslate(client, accessToken)
 
 	// 订单预览
 	// runOrderPreview(client, accessToken)
@@ -40,7 +43,7 @@ func main() {
 	// runGetLogisticsDetail(client, accessToken)
 
 	// 查询采购单
-	runQueryPurchaseOrders(client, accessToken)
+	// runQueryPurchaseOrders(client, accessToken)
 
 	//图片上传
 	// runImageUpload(client, accessToken)
@@ -56,7 +59,7 @@ func runItemSearch(client *taobao.Client, accessToken string) {
 	req := types.ItemSearchRequest{
 		Keyword:  "bags",
 		PageNo:   1,
-		PageSize: 5,
+		PageSize: 10,
 		Language: "en",
 	}
 	resp, err := client.Item.Search(req, accessToken)
@@ -81,6 +84,29 @@ func runItemDetail(client *taobao.Client, accessToken string) {
 		resp.Data.Title, float64(resp.Data.PromotionPrice)/100)
 }
 
+// 商品翻译
+func runItemTranslate(client *taobao.Client, accessToken string) {
+	req := types.ProductTranslateRequest{
+		ItemID:   "4096623585210707", // mp_id
+		Language: "en",
+	}
+
+	resp, err := client.Item.Translate(req, accessToken)
+	if err != nil {
+		log.Fatalf("❌ 商品翻译失败: %v", err)
+	}
+
+	if resp.Success && resp.Data != nil {
+		fmt.Printf("✅ 商品标题 (%s): %s\n", resp.Data.Language, resp.Data.Title)
+		for _, prop := range resp.Data.Properties {
+			fmt.Printf(" - %s: %s\n", prop.PropName, prop.ValueName)
+		}
+	} else {
+		fmt.Printf("❌ 翻译失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
+	}
+
+}
+
 // 订单预览
 func runOrderPreview(client *taobao.Client, accessToken string) {
 	req := types.PurchaseOrderRenderRequest{
@@ -97,7 +123,6 @@ func runOrderPreview(client *taobao.Client, accessToken string) {
 		ReceiverAddress: types.Address{
 			Name:        "ProfessorWen",
 			Country:     "中国大陆",
-			State:       "广东省",
 			City:        "广州市",
 			Address:     "白云湖街道机场路兵房街兵工厂67号集运仓",
 			MobilePhone: "13068212342",
