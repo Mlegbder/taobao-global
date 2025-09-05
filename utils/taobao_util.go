@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
@@ -111,6 +112,14 @@ func Execute(params map[string]string, base types.TaobaoBase) ([]byte, error) {
 	// 检查 HTTP 状态码
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("请求失败，状态码: %d, 响应: %s", response.StatusCode, string(bodyBytes))
+	}
+
+	var resp types.BaseResponse
+	if err = json.Unmarshal(bodyBytes, &resp); err != nil {
+		return nil, err
+	}
+	if resp.Code != "0" {
+		return nil, errors.New(resp.Code)
 	}
 
 	return bodyBytes, nil
