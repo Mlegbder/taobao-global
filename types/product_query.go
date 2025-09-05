@@ -46,7 +46,7 @@ type ProductSKU struct {
 	PicURL         string            `json:"pic_url"`
 	Quantity       int64             `json:"quantity"`
 	Price          int64             `json:"price"`
-	SkuID          string            `json:"sku_id"`
+	SkuID          int64             `json:"sku_id"`
 	Properties     []ProductProperty `json:"properties"`
 	Status         string            `json:"status"`
 	PromotionPrice int64             `json:"promotion_price"`
