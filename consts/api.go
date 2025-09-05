@@ -25,4 +25,5 @@ const (
 	TaoBaoApiOrderCancel           = "/purchase/order/asyn/cancel" //取消采购单接口 https://open.taobao.global/doc/api.htm?spm=panama_open.panama_open_home.0.0.753123f9VwZCVc#/api?cid=16&path=/purchase/order/asyn/cancel&methodType=GET/POST
 	TaoBaoApiLogisticsDetail       = "/logistics/detail/get"       // 查询采购单物流详情接口 https://distributor.taobao.global/apps/refund/list?spm=a1zlqa.report_list.apps_refund_list.d_btn
 	TaoBaoApiOrdersQuery           = "/purchase/orders/query"      // 查询采购单接口 https://open.taobao.global/doc/api.htm?spm=a2o9m.11193531.0.0.2d4a5288j6INTs#/api?cid=16&path=/purchase/orders/query&methodType=GET/POST
+	TaoBaoApiQueryRefundOrder      = "/order/refund/query"         //查询退款单接口 https://open.taobao.global/doc/api.htm?spm=a2o9m.11193531.0.0.4d7b5288YiaZxq#/api?cid=17&path=/order/refund/query&methodType=GET/POST
 )

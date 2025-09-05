@@ -37,41 +37,43 @@ type ItemDetail struct {
 
 // ItemProperty 商品属性
 type ItemProperty struct {
-	PropID    int64  `json:"prop_id"`
-	PropName  string `json:"prop_name"`
-	ValueID   int64  `json:"value_id"`
-	ValueName string `json:"value_name"`
+	PropID    int64  `json:"prop_id"`    // 属性ID
+	PropName  string `json:"prop_name"`  // 属性名称
+	ValueID   int64  `json:"value_id"`   // 属性值ID
+	ValueName string `json:"value_name"` // 属性值
+	// ValueDesc 在多语言场景下会出现 (属性值+备注)，这里省略了，可在 MultiLangInfo 里定义
 }
 
 // SkuItem 商品SKU
 type SkuItem struct {
-	SkuID          int64          `json:"sku_id"`
-	Quantity       int            `json:"quantity"`
-	Price          int64          `json:"price"`
-	PromotionPrice int64          `json:"promotion_price"`
-	PicURL         string         `json:"pic_url"`
-	Properties     []ItemProperty `json:"properties"`
-	CouponPrice    int64          `json:"coupon_price"`
+	SkuID          int64          `json:"sku_id"`          // SKU ID
+	Quantity       int            `json:"quantity"`        // 库存数量
+	Price          int64          `json:"price"`           // 原价 (单位: 分)
+	PromotionPrice int64          `json:"promotion_price"` // 优惠价 (单位: 分)
+	PicURL         string         `json:"pic_url"`         // 图片链接
+	Properties     []ItemProperty `json:"properties"`      // SKU属性列表
+	CouponPrice    int64          `json:"coupon_price"`    // 券后价 (单位: 分)
 }
 
 // PropertyImage 属性图片
 type PropertyImage struct {
-	Properties string `json:"properties"`
-	ImageURL   string `json:"image_url"`
+	Properties string `json:"properties"` // 属性 (如颜色:红色)
+	ImageURL   string `json:"image_url"`  // 图片链接
 }
 
 // MultiLangInfoDetail 多语言翻译信息
 type MultiLangInfoDetail struct {
-	Title        string            `json:"title"`
-	Properties   []ItemProperty    `json:"properties"`
-	SkuProps     []SkuLangProperty `json:"sku_properties"`
-	Language     string            `json:"language"`
-	MainImageURL string            `json:"main_image_url"`
-	CouponPrice  int64             `json:"coupon_price"`
+	Title        string            `json:"title"`          // 多语言标题
+	Properties   []ItemProperty    `json:"properties"`     // 多语言属性
+	SkuProps     []SkuLangProperty `json:"sku_properties"` // 多语言SKU属性
+	Language     string            `json:"language"`       // 翻译语种
+	MainImageURL string            `json:"main_image_url"` // 多语言主图
+	CouponPrice  int64             `json:"coupon_price"`   // 多语言券后价 (单位: 分)
 }
 
 // SkuLangProperty 多语言SKU属性
+// SkuLangProperty 多语言SKU属性
 type SkuLangProperty struct {
-	SkuID      int64          `json:"sku_id"`
-	Properties []ItemProperty `json:"properties"`
+	SkuID      int64          `json:"sku_id"`     // SKU ID
+	Properties []ItemProperty `json:"properties"` // 多语言SKU属性列表
 }

@@ -2,18 +2,28 @@ package types
 
 // CreatePurchaseOrderRequest 采购订单创建请求
 type CreatePurchaseOrderRequest struct {
-	OuterPurchaseID        string        `json:"outer_purchase_id"`                   // 必填: ISV采购id (幂等)
-	PurchaseAmount         int64         `json:"purchase_amount"`                     // 必填: 计划购买金额 (单位分)
-	SellerOrderNumber      string        `json:"seller_order_number,omitempty"`       // 可选: 买方电商平台订单号
-	OrderSource            string        `json:"order_source,omitempty"`              // 可选: 买方电商平台
-	OrderLineList          string        `json:"order_line_list"`                     // 必填: 下单商品信息列表 (itemId传mpId, skuId传mpSkuId)
-	Receiver               OrderAddress  `json:"receiver"`                            // 必填: 收货地址
-	WarehouseAddressInfo   *OrderAddress `json:"warehouse_address_info,omitempty"`    // 可选: 仓库地址 (非跨境必填)
-	ChannelOrderType       string        `json:"channel_order_type,omitempty"`        // 可选: PANAMA_DG / PANAMA
-	SupportPartialSuccess  bool          `json:"support_partial_success,omitempty"`   // 可选: 是否允许部分成功
-	OrderRemark            string        `json:"order_remark,omitempty"`              // 可选: 订单备注
-	NeedSupplyChainService bool          `json:"need_supply_chain_service,omitempty"` // 暂不提供
-	NeedSysRetry           bool          `json:"need_sys_retry,omitempty"`            // 可选: 是否系统重试
+	OuterPurchaseID        string         `json:"outer_purchase_id"`                   // 必填: ISV采购id (幂等)
+	PurchaseAmount         int64          `json:"purchase_amount"`                     // 必填: 计划购买金额 (单位分)
+	SellerOrderNumber      string         `json:"seller_order_number,omitempty"`       // 可选: 买方电商平台订单号
+	OrderSource            string         `json:"order_source,omitempty"`              // 可选: 买方电商平台
+	OrderLineList          []OrderLineReq `json:"-"`                                   // 必填: 下单商品信息列表 (itemId传mpId, skuId传mpSkuId)
+	Receiver               OrderAddress   `json:"receiver"`                            // 必填: 收货地址
+	WarehouseAddressInfo   *OrderAddress  `json:"warehouse_address_info,omitempty"`    // 可选: 仓库地址 (非跨境必填)
+	ChannelOrderType       string         `json:"channel_order_type,omitempty"`        // 可选: PANAMA_DG / PANAMA
+	SupportPartialSuccess  bool           `json:"support_partial_success,omitempty"`   // 可选: 是否允许部分成功
+	OrderRemark            string         `json:"order_remark,omitempty"`              // 可选: 订单备注
+	NeedSupplyChainService bool           `json:"need_supply_chain_service,omitempty"` // 暂不提供
+	NeedSysRetry           bool           `json:"need_sys_retry,omitempty"`            // 可选: 是否系统重试
+}
+
+// OrderLineReq 下单商品
+type OrderLineReq struct {
+	ItemID      string `json:"item_id"`       // 商品ID (mpId)
+	SkuID       string `json:"sku_id"`        // SKU ID (mpSkuId)
+	Quantity    int    `json:"quantity"`      // 数量
+	Currency    string `json:"currency"`      // 币种
+	Price       int64  `json:"price"`         // 单价 (单位: 分)
+	OrderLineNo string `json:"order_line_no"` // 外部ISV子单号
 }
 
 // OrderAddress 地址

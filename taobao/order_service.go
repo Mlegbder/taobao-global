@@ -18,7 +18,12 @@ func (s *OrderService) Render(req types.PurchaseOrderRenderRequest, accessToken 
 	params := map[string]string{
 		"access_token":             accessToken,
 		"need_supplychain_service": strconv.FormatBool(req.NeedSupplyChainService),
-		"render_item_List":         req.RenderItemList,
+	}
+
+	// 把 RenderItemList 转 JSON 字符串
+	if len(req.RenderItemList) > 0 {
+		b, _ := json.Marshal(req.RenderItemList)
+		params["render_item_List"] = string(b)
 	}
 
 	// warehouse_address 可选
@@ -56,7 +61,12 @@ func (s *OrderService) Create(req types.CreatePurchaseOrderRequest, accessToken 
 		"access_token":      accessToken,
 		"outer_purchase_id": req.OuterPurchaseID,
 		"purchase_amount":   strconv.FormatInt(req.PurchaseAmount, 10),
-		"order_line_list":   req.OrderLineList,
+	}
+
+	// 转换 OrderLineList
+	if len(req.OrderLineList) > 0 {
+		b, _ := json.Marshal(req.OrderLineList)
+		params["order_line_list"] = string(b)
 	}
 
 	if req.SellerOrderNumber != "" {
@@ -200,6 +210,28 @@ func (s *OrderService) Query(req types.QueryPurchaseOrdersRequest, accessToken s
 	}
 
 	var resp types.QueryPurchaseOrdersResponse
+	if err = json.Unmarshal(respBytes, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// QueryRefundOrder 查询退款单
+func (s *OrderService) QueryRefundOrder(req types.QueryRefundOrderRequest, accessToken string) (*types.QueryRefundOrderResponse, error) {
+	params := map[string]string{
+		"access_token": accessToken,
+		"refundId":     strconv.FormatInt(req.RefundID, 10),
+	}
+
+	baseConf := s.client.Base
+	baseConf.ApiEndpoint = consts.TaoBaoApiQueryRefundOrder
+
+	respBytes, err := utils.Execute(params, baseConf)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp types.QueryRefundOrderResponse
 	if err = json.Unmarshal(respBytes, &resp); err != nil {
 		return nil, err
 	}

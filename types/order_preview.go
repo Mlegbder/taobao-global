@@ -2,11 +2,18 @@ package types
 
 // PurchaseOrderRenderRequest 订单预览请求
 type PurchaseOrderRenderRequest struct {
-	NeedSupplyChainService bool     `json:"need_supplychain_service"`    // 是否需要供应链服务（跨境物流填 true）
-	RenderItemList         string   `json:"render_item_list"`            // 渲染商品列表（JSON字符串）
-	WarehouseAddress       *Address `json:"warehouse_address,omitempty"` // 国内仓库地址（非跨境必填）
-	ReceiverAddress        Address  `json:"receiver_address"`            // 收货人地址（跨境必填）
-	TaxID                  string   `json:"tax_id,omitempty"`            // 税号（巴西必填）
+	NeedSupplyChainService bool            `json:"need_supplychain_service"`    // 是否需要供应链服务（跨境物流填 true）
+	RenderItemList         []RenderItemReq `json:"-"`                           // 渲染商品列表（JSON字符串）
+	WarehouseAddress       *Address        `json:"warehouse_address,omitempty"` // 国内仓库地址（非跨境必填）
+	ReceiverAddress        Address         `json:"receiver_address"`            // 收货人地址（跨境必填）
+	TaxID                  string          `json:"tax_id,omitempty"`            // 税号（巴西必填）
+}
+
+// RenderItemReq 渲染订单商品
+type RenderItemReq struct {
+	ItemID   string `json:"item_id"`  // 商品ID (mpId)
+	SkuID    string `json:"sku_id"`   // SKU ID (mpSkuId)
+	Quantity int    `json:"quantity"` // 数量
 }
 
 // Address 地址结构体

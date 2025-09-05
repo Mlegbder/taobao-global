@@ -16,7 +16,7 @@ const (
 // main 函数选择要执行的示例
 func main() {
 	// 获取客户端
-	client, accessToken := getClient()
+	// client, accessToken := getClient()
 
 	// 关键词查询商品
 	// runItemSearch(client, accessToken)
@@ -34,7 +34,7 @@ func main() {
 	// runCreateOrder(client, accessToken)
 
 	// 取消采购单
-	runCancelOrder(client, accessToken)
+	// runCancelOrder(client, accessToken)
 
 	// 批量支付
 	// runBatchPay(client, accessToken)
@@ -71,6 +71,19 @@ func runItemSearch(client *taobao.Client, accessToken string) {
 
 // 商品详情
 func runItemDetail(client *taobao.Client, accessToken string) {
+	req := types.QueryAllProductRequest{
+		ItemID: "805577403719",
+	}
+	resp, err := client.Item.GetDetail(req, accessToken)
+	if err != nil {
+		log.Fatalf("❌ 商品详情获取失败: %v", err)
+	}
+	fmt.Printf("✅ 商品标题: %s, 优惠价: %.2f 元\n",
+		resp.Data.Title, float64(resp.Data.PromotionPrice)/100)
+}
+
+// 商品货源详情
+func runSourceItemDetail(client *taobao.Client, accessToken string) {
 	req := types.ItemDetailRequest{
 		ItemResource: "taobao",
 		ItemID:       "778127375879",
@@ -111,7 +124,9 @@ func runItemTranslate(client *taobao.Client, accessToken string) {
 func runOrderPreview(client *taobao.Client, accessToken string) {
 	req := types.PurchaseOrderRenderRequest{
 		NeedSupplyChainService: false,
-		RenderItemList:         `[{"item_id":"4096526553499286","sku_id":"28464810350230","quantity":2}]`,
+		RenderItemList: []types.RenderItemReq{
+			{ItemID: "4096526553499286", SkuID: "28464810350230", Quantity: 2},
+		},
 		WarehouseAddress: &types.Address{
 			Name:        "ProfessorWen",
 			Country:     "中国大陆",
@@ -138,16 +153,17 @@ func runOrderPreview(client *taobao.Client, accessToken string) {
 // 创建采购单
 func runCreateOrder(client *taobao.Client, accessToken string) {
 	req := types.CreatePurchaseOrderRequest{
-		OuterPurchaseID: "ISV4123456789",
-		PurchaseAmount:  199600, // 单位: 分
-		OrderLineList: `[{
-			"item_id": "4096526553499286", 
-			"sku_id": "28464810350230", 
-			"quantity": 2,
-			"currency": "CNY",
-			"price": 199600,
-			"order_line_no": "ISV123456789"
-		}]`,
+		OuterPurchaseID: "TEST100000001",
+		PurchaseAmount:  2000, // 单位: 分
+		OrderLineList: []types.OrderLineReq{
+			{ItemID: "4096701167701319",
+				SkuID:       "32077491877191",
+				Quantity:    1,
+				Currency:    "CNY",
+				Price:       1000,
+				OrderLineNo: "TEST100000001",
+			},
+		},
 		Receiver: types.OrderAddress{
 			Name:        "ProfessorWen",
 			Country:     "中国大陆",
@@ -181,7 +197,7 @@ func runCreateOrder(client *taobao.Client, accessToken string) {
 // 批量支付
 func runBatchPay(client *taobao.Client, accessToken string) {
 	req := types.BatchPayPurchaseOrderRequest{
-		PurchaseOrderIDList: []int64{202509020001, 202509020002}, //采购IDS
+		PurchaseOrderIDList: []int64{200077867837}, //采购IDS
 	}
 
 	resp, err := client.Order.BatchPay(req, accessToken)
@@ -317,6 +333,31 @@ func runImgSearch(client *taobao.Client, accessToken string) {
 		}
 	} else {
 		fmt.Println("未找到相关商品")
+	}
+}
+
+// 查询退款单
+func runQueryRefundOrder(client *taobao.Client, accessToken string) {
+	req := types.QueryRefundOrderRequest{
+		RefundID: 1234567890,
+	}
+
+	resp, err := client.Order.QueryRefundOrder(req, accessToken)
+	if err != nil {
+		log.Fatalf("❌ 查询退款单失败: %v", err)
+	}
+
+	if resp.Success && resp.Data != nil {
+		fmt.Printf("✅ 退款单 %d 状态: %d\n", resp.Data.RefundOrder.RefundID, resp.Data.RefundOrder.RefundStatus)
+		fmt.Printf("退款金额: %.2f 元\n", float64(resp.Data.RefundOrder.RefundFee)/100)
+		if resp.Data.PurchaseOrderLine != nil {
+			fmt.Printf("商品: %s, 数量: %d\n",
+				resp.Data.PurchaseOrderLine.ItemTitle,
+				resp.Data.PurchaseOrderLine.Quantity,
+			)
+		}
+	} else {
+		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
 	}
 }
 
