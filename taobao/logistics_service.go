@@ -14,9 +14,9 @@ type LogisticsService struct {
 }
 
 // GetDetail 获取子单物流信息
-func (s *LogisticsService) GetDetail(req types.GetLogisticsDetailRequest, accessToken string) (*types.GetLogisticsDetailResponse, error) {
+func (s *LogisticsService) GetDetail(req types.GetLogisticsDetailRequest) (*types.GetLogisticsDetailResponse, error) {
 	params := map[string]string{
-		"access_token":           accessToken,
+		"access_token":           s.client.getAccessToken(),
 		"purchase_order_line_id": strconv.FormatInt(req.PurchaseOrderLineID, 10),
 	}
 

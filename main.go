@@ -16,53 +16,53 @@ const (
 // main 函数选择要执行的示例
 func main() {
 	// 获取客户端
-	// client, accessToken := getClient()
+	client := getClient()
 
 	// 关键词查询商品
-	// runItemSearch(client, accessToken)
+	runItemSearch(client)
 
 	// 获取商品详情
-	// runItemDetail(client, accessToken)
+	// runItemDetail(client)
 
 	// 获取商品翻译
-	// runItemTranslate(client, accessToken)
+	// runItemTranslate(client)
 
 	// 订单预览
-	// runOrderPreview(client, accessToken)
+	// runOrderPreview(client)
 
 	// 创建采购单
-	// runCreateOrder(client, accessToken)
+	// runCreateOrder(client)
 
 	// 取消采购单
-	// runCancelOrder(client, accessToken)
+	// runCancelOrder(client)
 
 	// 批量支付
-	// runBatchPay(client, accessToken)
+	// runBatchPay(client)
 
 	// 查询采购单物流详情
-	// runGetLogisticsDetail(client, accessToken)
+	// runGetLogisticsDetail(client)
 
 	// 查询采购单
-	// runQueryPurchaseOrders(client, accessToken)
+	// runQueryPurchaseOrders(client)
 
 	//图片上传
-	// runImageUpload(client, accessToken)
+	// runImageUpload(client)
 
 	// 图片搜索
-	//runImgSearch(client, accessToken)
+	//runImgSearch(client)
 }
 
 // ========== 示例函数们 ==========
 
 // 商品搜索
-func runItemSearch(client *taobao.Client, accessToken string) {
+func runItemSearch(client *taobao.Client) {
 	req := types.ItemSearchRequest{
 		Keyword:  "bags",
 		PageNo:   1,
 		PageSize: 10,
 		Language: "en",
 	}
-	resp, err := client.Item.Search(req, accessToken)
+	resp, err := client.Item.Search(req)
 	if err != nil {
 		log.Fatalf("❌ 商品搜索失败: %v", err)
 	}
@@ -70,11 +70,11 @@ func runItemSearch(client *taobao.Client, accessToken string) {
 }
 
 // 商品详情
-func runItemDetail(client *taobao.Client, accessToken string) {
+func runItemDetail(client *taobao.Client) {
 	req := types.QueryAllProductRequest{
 		ItemID: "805577403719",
 	}
-	resp, err := client.Item.GetDetail(req, accessToken)
+	resp, err := client.Item.GetDetail(req)
 	if err != nil {
 		log.Fatalf("❌ 商品详情获取失败: %v", err)
 	}
@@ -83,13 +83,13 @@ func runItemDetail(client *taobao.Client, accessToken string) {
 }
 
 // 商品货源详情
-func runSourceItemDetail(client *taobao.Client, accessToken string) {
+func runSourceItemDetail(client *taobao.Client) {
 	req := types.ItemDetailRequest{
 		ItemResource: "taobao",
 		ItemID:       "778127375879",
 		Language:     "en",
 	}
-	resp, err := client.Item.GetSourceItemDetail(req, accessToken)
+	resp, err := client.Item.GetSourceItemDetail(req)
 	if err != nil {
 		log.Fatalf("❌ 商品详情获取失败: %v", err)
 	}
@@ -98,13 +98,13 @@ func runSourceItemDetail(client *taobao.Client, accessToken string) {
 }
 
 // 商品翻译
-func runItemTranslate(client *taobao.Client, accessToken string) {
+func runItemTranslate(client *taobao.Client) {
 	req := types.ProductTranslateRequest{
 		ItemID:   "4096623585210707", // mp_id
 		Language: "en",
 	}
 
-	resp, err := client.Item.Translate(req, accessToken)
+	resp, err := client.Item.Translate(req)
 	if err != nil {
 		log.Fatalf("❌ 商品翻译失败: %v", err)
 	}
@@ -121,7 +121,7 @@ func runItemTranslate(client *taobao.Client, accessToken string) {
 }
 
 // 订单预览
-func runOrderPreview(client *taobao.Client, accessToken string) {
+func runOrderPreview(client *taobao.Client) {
 	req := types.PurchaseOrderRenderRequest{
 		NeedSupplyChainService: false,
 		RenderItemList: []types.RenderItemReq{
@@ -143,7 +143,7 @@ func runOrderPreview(client *taobao.Client, accessToken string) {
 			MobilePhone: "13068212342",
 		},
 	}
-	resp, err := client.Order.Render(req, accessToken)
+	resp, err := client.Order.Render(req)
 	if err != nil {
 		log.Fatalf("❌ 订单预览失败: %v", err)
 	}
@@ -151,7 +151,7 @@ func runOrderPreview(client *taobao.Client, accessToken string) {
 }
 
 // 创建采购单
-func runCreateOrder(client *taobao.Client, accessToken string) {
+func runCreateOrder(client *taobao.Client) {
 	req := types.CreatePurchaseOrderRequest{
 		OuterPurchaseID: "TEST100000001",
 		PurchaseAmount:  2000, // 单位: 分
@@ -182,7 +182,7 @@ func runCreateOrder(client *taobao.Client, accessToken string) {
 		},
 		OrderRemark: "Test order",
 	}
-	resp, err := client.Order.Create(req, accessToken)
+	resp, err := client.Order.Create(req)
 	if err != nil {
 		log.Fatalf("❌ 创建采购单失败: %v", err)
 	}
@@ -195,12 +195,12 @@ func runCreateOrder(client *taobao.Client, accessToken string) {
 }
 
 // 批量支付
-func runBatchPay(client *taobao.Client, accessToken string) {
+func runBatchPay(client *taobao.Client) {
 	req := types.BatchPayPurchaseOrderRequest{
 		PurchaseOrderIDList: []int64{200077867837}, //采购IDS
 	}
 
-	resp, err := client.Order.BatchPay(req, accessToken)
+	resp, err := client.Order.BatchPay(req)
 	if err != nil {
 		log.Fatalf("batch pay failed: %v", err)
 	}
@@ -217,13 +217,13 @@ func runBatchPay(client *taobao.Client, accessToken string) {
 }
 
 // 取消采购单
-func runCancelOrder(client *taobao.Client, accessToken string) {
+func runCancelOrder(client *taobao.Client) {
 	req := types.AsynCancelPurchaseOrderRequest{
 		PurchaseID:   "200077821489", // 替换成真实采购单号
 		CancelReason: "Customer requested cancellation",
 		CancelRemark: "测试取消订单",
 	}
-	resp, err := client.Order.AsynCancel(req, accessToken)
+	resp, err := client.Order.AsynCancel(req)
 	if err != nil {
 		log.Fatalf("❌ 取消订单失败: %v", err)
 	}
@@ -235,12 +235,12 @@ func runCancelOrder(client *taobao.Client, accessToken string) {
 }
 
 // 查询采购单物流详情
-func runGetLogisticsDetail(client *taobao.Client, accessToken string) {
+func runGetLogisticsDetail(client *taobao.Client) {
 	req := types.GetLogisticsDetailRequest{
 		PurchaseOrderLineID: 1234567890, // 子单号
 	}
 
-	resp, err := client.Logistics.GetDetail(req, accessToken)
+	resp, err := client.Logistics.GetDetail(req)
 	if err != nil {
 		log.Fatalf("get logistics detail failed: %v", err)
 	}
@@ -260,14 +260,14 @@ func runGetLogisticsDetail(client *taobao.Client, accessToken string) {
 }
 
 // 查询采购单
-func runQueryPurchaseOrders(client *taobao.Client, accessToken string) {
+func runQueryPurchaseOrders(client *taobao.Client) {
 	req := types.QueryPurchaseOrdersRequest{
 		PurchaseIDS: []int64{200077684761}, // 采购单ID
 		PageNo:      1,
 		PageSize:    10,
 	}
 
-	resp, err := client.Order.Query(req, accessToken)
+	resp, err := client.Order.Query(req)
 	if err != nil {
 		log.Fatalf("❌ 查询采购单失败: %v", err)
 	}
@@ -293,7 +293,7 @@ func runQueryPurchaseOrders(client *taobao.Client, accessToken string) {
 }
 
 // 图片上传
-func runImageUpload(client *taobao.Client, accessToken string) {
+func runImageUpload(client *taobao.Client) {
 	// 假设你已经把图片转成 Base64 字符串
 	imgBase64 := "UklGRpxpAgBXRUJQVlA4WAoAAAAgAAAArwQArwQASUND..."
 
@@ -301,7 +301,7 @@ func runImageUpload(client *taobao.Client, accessToken string) {
 		ImageBase64: imgBase64,
 	}
 
-	resp, err := client.Upload.Image(req, accessToken)
+	resp, err := client.Upload.Image(req)
 	if err != nil {
 		log.Fatalf("❌ 图片上传失败: %v", err)
 	}
@@ -314,14 +314,14 @@ func runImageUpload(client *taobao.Client, accessToken string) {
 }
 
 // 图片搜索
-func runImgSearch(client *taobao.Client, accessToken string) {
+func runImgSearch(client *taobao.Client) {
 	// 用 image_id 搜索 (推荐：先调用 ImageUpload 上传图片获取 image_id)
 	req := types.ImgSearchRequest{
 		ImageID:  "1521908561144519126",
 		Language: "en",
 	}
 
-	resp, err := client.Item.ImgSearch(req, accessToken)
+	resp, err := client.Item.ImgSearch(req)
 	if err != nil {
 		log.Fatalf("❌ 图片搜索失败: %v", err)
 	}
@@ -337,12 +337,12 @@ func runImgSearch(client *taobao.Client, accessToken string) {
 }
 
 // 查询退款单
-func runQueryRefundOrder(client *taobao.Client, accessToken string) {
+func runQueryRefundOrder(client *taobao.Client) {
 	req := types.QueryRefundOrderRequest{
 		RefundID: 1234567890,
 	}
 
-	resp, err := client.Order.QueryRefundOrder(req, accessToken)
+	resp, err := client.Order.QueryRefundOrder(req)
 	if err != nil {
 		log.Fatalf("❌ 查询退款单失败: %v", err)
 	}
@@ -364,7 +364,7 @@ func runQueryRefundOrder(client *taobao.Client, accessToken string) {
 // ========== 工具函数 ==========
 
 // 获取客户端
-func getClient() (*taobao.Client, string) {
+func getClient() *taobao.Client {
 	// 1. 加载 .env 文件
 	if err := godotenv.Load(); err != nil {
 		log.Println("⚠️ Warning: .env file not found, will use system environment variables")
@@ -378,6 +378,6 @@ func getClient() (*taobao.Client, string) {
 		log.Fatal("❌ TAOBAO_APP_KEY / TAOBAO_APP_SECRET / TAOBAO_ACCESS_TOKEN is not set")
 	}
 
-	client := taobao.NewClient(BaseApi, appKey, appSecret)
-	return client, accessToken
+	client := taobao.NewClient(BaseApi, appKey, appSecret, accessToken)
+	return client
 }

@@ -14,9 +14,9 @@ type OrderService struct {
 }
 
 // Render 订单预览
-func (s *OrderService) Render(req types.PurchaseOrderRenderRequest, accessToken string) (*types.PurchaseOrderRenderResponse, error) {
+func (s *OrderService) Render(req types.PurchaseOrderRenderRequest) (*types.PurchaseOrderRenderResponse, error) {
 	params := map[string]string{
-		"access_token":             accessToken,
+		"access_token":             s.client.getAccessToken(),
 		"need_supplychain_service": strconv.FormatBool(req.NeedSupplyChainService),
 	}
 
@@ -56,9 +56,9 @@ func (s *OrderService) Render(req types.PurchaseOrderRenderRequest, accessToken 
 }
 
 // Create 创建采购订单
-func (s *OrderService) Create(req types.CreatePurchaseOrderRequest, accessToken string) (*types.CreatePurchaseOrderResponse, error) {
+func (s *OrderService) Create(req types.CreatePurchaseOrderRequest) (*types.CreatePurchaseOrderResponse, error) {
 	params := map[string]string{
-		"access_token":      accessToken,
+		"access_token":      s.client.getAccessToken(),
 		"outer_purchase_id": req.OuterPurchaseID,
 		"purchase_amount":   strconv.FormatInt(req.PurchaseAmount, 10),
 	}
@@ -114,9 +114,9 @@ func (s *OrderService) Create(req types.CreatePurchaseOrderRequest, accessToken 
 }
 
 // AsynCancel 异步取消采购订单
-func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest, accessToken string) (*types.AsynCancelPurchaseOrderResponse, error) {
+func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest) (*types.AsynCancelPurchaseOrderResponse, error) {
 	params := map[string]string{
-		"access_token":  accessToken,
+		"access_token":  s.client.getAccessToken(),
 		"purchase_id":   req.PurchaseID,
 		"cancel_reason": req.CancelReason,
 	}
@@ -145,12 +145,12 @@ func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest, acce
 }
 
 // BatchPay 批量支付采购订单
-func (s *OrderService) BatchPay(req types.BatchPayPurchaseOrderRequest, accessToken string) (*types.BatchPayPurchaseOrderResponse, error) {
+func (s *OrderService) BatchPay(req types.BatchPayPurchaseOrderRequest) (*types.BatchPayPurchaseOrderResponse, error) {
 	// 将数组序列化成 JSON 字符串
 	b, _ := json.Marshal(req.PurchaseOrderIDList)
 
 	params := map[string]string{
-		"access_token":        accessToken,
+		"access_token":        s.client.getAccessToken(),
 		"purchaseOrderIdList": string(b),
 	}
 
@@ -170,9 +170,9 @@ func (s *OrderService) BatchPay(req types.BatchPayPurchaseOrderRequest, accessTo
 }
 
 // Query 采购订单查询
-func (s *OrderService) Query(req types.QueryPurchaseOrdersRequest, accessToken string) (*types.QueryPurchaseOrdersResponse, error) {
+func (s *OrderService) Query(req types.QueryPurchaseOrdersRequest) (*types.QueryPurchaseOrdersResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken,
+		"access_token": s.client.getAccessToken(),
 	}
 
 	if req.Status != "" {
@@ -217,9 +217,9 @@ func (s *OrderService) Query(req types.QueryPurchaseOrdersRequest, accessToken s
 }
 
 // QueryRefundOrder 查询退款单
-func (s *OrderService) QueryRefundOrder(req types.QueryRefundOrderRequest, accessToken string) (*types.QueryRefundOrderResponse, error) {
+func (s *OrderService) QueryRefundOrder(req types.QueryRefundOrderRequest) (*types.QueryRefundOrderResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken,
+		"access_token": s.client.getAccessToken(),
 		"refundId":     strconv.FormatInt(req.RefundID, 10),
 	}
 

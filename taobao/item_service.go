@@ -14,9 +14,9 @@ type ItemService struct {
 }
 
 // Search 商品搜索
-func (s *ItemService) Search(req types.ItemSearchRequest, accessToken string) (*types.ItemSearchResponse, error) {
+func (s *ItemService) Search(req types.ItemSearchRequest) (*types.ItemSearchResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken, // 必须传入 access_token
+		"access_token": s.client.getAccessToken(), // 必须传入 access_token
 	}
 
 	if req.Keyword != "" {
@@ -72,9 +72,9 @@ func joinStrings(arr []string, sep string) string {
 }
 
 // GetDetail 获取商品详情
-func (s *ItemService) GetDetail(req types.QueryAllProductRequest, accessToken string) (*types.QueryAllProductResponse, error) {
+func (s *ItemService) GetDetail(req types.QueryAllProductRequest) (*types.QueryAllProductResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken,
+		"access_token": s.client.getAccessToken(),
 		"item_id":      req.ItemID,
 	}
 	if req.ItemSourceMarket != "" {
@@ -97,9 +97,9 @@ func (s *ItemService) GetDetail(req types.QueryAllProductRequest, accessToken st
 }
 
 // GetSourceItemDetail 获取商品详情
-func (s *ItemService) GetSourceItemDetail(req types.ItemDetailRequest, accessToken string) (*types.ItemDetailResponse, error) {
+func (s *ItemService) GetSourceItemDetail(req types.ItemDetailRequest) (*types.ItemDetailResponse, error) {
 	params := map[string]string{
-		"access_token":  accessToken,
+		"access_token":  s.client.getAccessToken(),
 		"item_resource": req.ItemResource,
 		"item_id":       req.ItemID,
 	}
@@ -127,9 +127,9 @@ func (s *ItemService) GetSourceItemDetail(req types.ItemDetailRequest, accessTok
 }
 
 // ImgSearch 图片搜索
-func (s *ItemService) ImgSearch(req types.ImgSearchRequest, accessToken string) (*types.ImgSearchResponse, error) {
+func (s *ItemService) ImgSearch(req types.ImgSearchRequest) (*types.ImgSearchResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken,
+		"access_token": s.client.getAccessToken(),
 	}
 
 	if req.PicURL != "" {
@@ -161,9 +161,9 @@ func (s *ItemService) ImgSearch(req types.ImgSearchRequest, accessToken string) 
 }
 
 // Translate 商品信息翻译
-func (s *ItemService) Translate(req types.ProductTranslateRequest, accessToken string) (*types.ProductTranslateResponse, error) {
+func (s *ItemService) Translate(req types.ProductTranslateRequest) (*types.ProductTranslateResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken,
+		"access_token": s.client.getAccessToken(),
 		"item_id":      req.ItemID,
 	}
 	if req.Language != "" {

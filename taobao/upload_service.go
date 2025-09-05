@@ -13,9 +13,9 @@ type UploadService struct {
 }
 
 // Image 图片上传
-func (s *UploadService) Image(req types.ImageUploadRequest, accessToken string) (*types.ImageUploadResponse, error) {
+func (s *UploadService) Image(req types.ImageUploadRequest) (*types.ImageUploadResponse, error) {
 	params := map[string]string{
-		"access_token": accessToken,
+		"access_token": s.client.getAccessToken(),
 		"image_base64": req.ImageBase64,
 	}
 

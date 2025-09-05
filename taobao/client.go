@@ -15,11 +15,12 @@ type Client struct {
 }
 
 // NewClient 创建一个新客户端
-func NewClient(baseApi, appKey, appSecret string) *Client {
+func NewClient(baseApi, appKey, appSecret, accessToken string) *Client {
 	baseConf := types.TaobaoBase{
-		AppKey:    appKey,
-		AppSecret: appSecret,
-		Api:       baseApi,
+		AppKey:      appKey,
+		AppSecret:   appSecret,
+		Api:         baseApi,
+		AccessToken: accessToken,
 	}
 
 	client := &Client{Base: baseConf}
@@ -30,4 +31,8 @@ func NewClient(baseApi, appKey, appSecret string) *Client {
 	client.Upload = &UploadService{client: client}
 
 	return client
+}
+
+func (c *Client) getAccessToken() string {
+	return c.Base.AccessToken
 }
