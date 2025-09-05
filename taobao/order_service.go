@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
-	"github.com/Mlegbder/taobao-global/utils"
 	"strconv"
 )
 
@@ -43,7 +42,7 @@ func (s *OrderService) Render(req types.PurchaseOrderRenderRequest) (*types.Purc
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiPurchaseOrderRender
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +100,7 @@ func (s *OrderService) Create(req types.CreatePurchaseOrderRequest) (*types.Crea
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiCreatePurchaseOrder
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +131,7 @@ func (s *OrderService) AsynCancel(req types.AsynCancelPurchaseOrderRequest) (*ty
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiOrderCancel
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +156,7 @@ func (s *OrderService) BatchPay(req types.BatchPayPurchaseOrderRequest) (*types.
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiPurchaseOrderBatchPay
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +203,7 @@ func (s *OrderService) Query(req types.QueryPurchaseOrdersRequest) (*types.Query
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiOrdersQuery
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +225,7 @@ func (s *OrderService) QueryRefundOrder(req types.QueryRefundOrderRequest) (*typ
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiQueryRefundOrder
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}

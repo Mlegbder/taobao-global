@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
-	"github.com/Mlegbder/taobao-global/utils"
 	"strconv"
 )
 
@@ -47,7 +46,7 @@ func (s *ItemService) Search(req types.ItemSearchRequest) (*types.ItemSearchResp
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiProductSearch
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +83,7 @@ func (s *ItemService) GetDetail(req types.QueryAllProductRequest) (*types.QueryA
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiQueryAllProduct
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +113,7 @@ func (s *ItemService) GetSourceItemDetail(req types.ItemDetailRequest) (*types.I
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiSourceItemDetail
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +147,7 @@ func (s *ItemService) ImgSearch(req types.ImgSearchRequest) (*types.ImgSearchRes
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiImgSearch
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +172,7 @@ func (s *ItemService) Translate(req types.ProductTranslateRequest) (*types.Produ
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiProductInfoTran
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}

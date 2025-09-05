@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
-	"github.com/Mlegbder/taobao-global/utils"
 	"strconv"
 )
 
@@ -23,7 +22,7 @@ func (s *LogisticsService) GetDetail(req types.GetLogisticsDetailRequest) (*type
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiLogisticsDetail
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}

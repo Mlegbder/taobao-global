@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
-	"github.com/Mlegbder/taobao-global/utils"
 )
 
 // UploadService 提供上传相关API
@@ -22,7 +21,7 @@ func (s *UploadService) Image(req types.ImageUploadRequest) (*types.ImageUploadR
 	baseConf := s.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiImageUpload
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := s.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}

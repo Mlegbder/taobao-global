@@ -1,12 +1,11 @@
 package types
 
 type TaobaoBase struct {
-	ApiEndpoint  string
-	AppKey       string
-	AppSecret    string
-	Api          string
-	AccessToken  string
-	RefreshToken string
+	ApiEndpoint string
+	AppKey      string
+	AppSecret   string
+	Api         string
+	Store       TokenStore
 }
 
 type BaseResponse struct {
@@ -14,4 +13,9 @@ type BaseResponse struct {
 	Code      string      `json:"code"`       // 响应码 (通常 "0" 表示成功)
 	RequestID string      `json:"request_id"` // 请求ID
 	TraceID   string      `json:"_trace_id_"` // Trace链路ID
+}
+
+type TokenStore interface {
+	SaveToken(token *TokenResponse) error
+	LoadToken() (*TokenResponse, error)
 }

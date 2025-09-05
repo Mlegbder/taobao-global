@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"github.com/Mlegbder/taobao-global/taobao"
 	"github.com/Mlegbder/taobao-global/types"
-	"github.com/joho/godotenv"
 	"log"
-	"os"
 )
 
 const (
@@ -15,11 +13,9 @@ const (
 
 // main 函数选择要执行的示例
 func main() {
-	// 获取客户端
-	client := getClient()
 
 	// 关键词查询商品
-	runItemSearch(client)
+	// runItemSearch(client)
 
 	// 获取商品详情
 	// runItemDetail(client)
@@ -359,25 +355,4 @@ func runQueryRefundOrder(client *taobao.Client) {
 	} else {
 		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
 	}
-}
-
-// ========== 工具函数 ==========
-
-// 获取客户端
-func getClient() *taobao.Client {
-	// 1. 加载 .env 文件
-	if err := godotenv.Load(); err != nil {
-		log.Println("⚠️ Warning: .env file not found, will use system environment variables")
-	}
-
-	// 2. 从环境变量读取
-	appKey := os.Getenv("TAOBAO_APP_KEY")
-	appSecret := os.Getenv("TAOBAO_APP_SECRET")
-	accessToken := os.Getenv("TAOBAO_ACCESS_TOKEN")
-	if appKey == "" || appSecret == "" || accessToken == "" {
-		log.Fatal("❌ TAOBAO_APP_KEY / TAOBAO_APP_SECRET / TAOBAO_ACCESS_TOKEN is not set")
-	}
-
-	client := taobao.NewClient(BaseApi, appKey, appSecret, accessToken)
-	return client
 }

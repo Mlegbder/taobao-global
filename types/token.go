@@ -17,24 +17,10 @@ type TokenResponse struct {
 	Account          string `json:"account"`            // 登录用户账户
 	RefreshToken     string `json:"refresh_token"`      // 刷新 token
 	RefreshExpiresIn int64  `json:"refresh_expires_in"` // 刷新 token 过期时间（秒）
+	ErrorCode        string `json:"error_code"`         // 错误码
 }
 
 // RefreshTokenRequest 刷新 AccessToken 请求
 type RefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token"` // 必填: refresh_token
-}
-
-// RefreshTokenResponse 刷新 AccessToken 响应
-type RefreshTokenResponse struct {
-	ExpiresIn        int64  `json:"expires_in"`         // access_token 过期时间 (秒)
-	AccountID        string `json:"account_id"`         // 账户ID (可能为 null)
-	UserID           string `json:"user_id"`            // 用户ID
-	SellerID         string `json:"seller_id"`          // 卖家ID
-	ShortCode        string `json:"short_code"`         // TW Seller Center 短码
-	AccountPlatform  string `json:"account_platform"`   // 账户平台
-	AccessToken      string `json:"access_token"`       // 新的 AccessToken
-	Account          string `json:"account"`            // 登录用户账号
-	RefreshToken     string `json:"refresh_token"`      // 新的 RefreshToken
-	RefreshExpiresIn int64  `json:"refresh_expires_in"` // refresh_token 过期时间 (秒)
-	ErrorCode        string `json:"error_code"`         // 错误码
 }

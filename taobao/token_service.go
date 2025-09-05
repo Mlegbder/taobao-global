@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/types"
-	"github.com/Mlegbder/taobao-global/utils"
 )
 
 // TokenService 提供 Token 相关的 API 封装
@@ -21,7 +20,7 @@ func (t *TokenService) Create(req types.TokenRequest) (*types.TokenResponse, err
 	baseConf := t.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiGenerateAccessToken
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := t.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +33,7 @@ func (t *TokenService) Create(req types.TokenRequest) (*types.TokenResponse, err
 }
 
 // Refresh 刷新 AccessToken
-func (t *TokenService) Refresh(req types.RefreshTokenRequest) (*types.RefreshTokenResponse, error) {
+func (t *TokenService) Refresh(req types.RefreshTokenRequest) (*types.TokenResponse, error) {
 	params := map[string]string{
 		"refresh_token": req.RefreshToken,
 	}
@@ -42,12 +41,12 @@ func (t *TokenService) Refresh(req types.RefreshTokenRequest) (*types.RefreshTok
 	baseConf := t.client.Base
 	baseConf.ApiEndpoint = consts.TaoBaoApiRefreshAccessToken
 
-	respBytes, err := utils.Execute(params, baseConf)
+	respBytes, err := t.client.Execute(params, baseConf)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp types.RefreshTokenResponse
+	var resp types.TokenResponse
 	if err = json.Unmarshal(respBytes, &resp); err != nil {
 		return nil, err
 	}
