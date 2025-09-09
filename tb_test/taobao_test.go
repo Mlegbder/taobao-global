@@ -28,7 +28,53 @@ func (m *MemoryTokenStore) LoadToken() (*types.TokenResponse, error) {
 	return m.token, nil
 }
 
-func TestClientExecute(t *testing.T) {
+// 商品详情
+func TestRunItemDetail(t *testing.T) {
+	client := getClient()
+	req := types.QueryAllProductRequest{
+		ItemID: "805577403719",
+	}
+	resp, err := client.Item.GetDetail(req)
+	if err != nil {
+		log.Fatalf("❌ 商品详情获取失败: %v", err)
+	}
+	fmt.Printf("✅ 商品标题: %s, 优惠价: %.2f 元\n",
+		resp.Data.Title, float64(resp.Data.PromotionPrice)/100)
+}
+
+// 商品详情
+func TestRunItemSearch(t *testing.T) {
+	client := getClient()
+	req := types.ItemSearchRequest{
+		Keyword:  "bags",
+		PageNo:   1,
+		PageSize: 10,
+		Language: "en",
+	}
+	resp, err := client.Item.Search(req)
+	if err != nil {
+		log.Fatalf("❌ 商品搜索失败: %v", err)
+	}
+	fmt.Printf("✅ 搜索到 %d 条商品\n", len(resp.Data.Items))
+}
+
+// 获取货源详情(带翻译)
+func TestRunSourceItemDetail(t *testing.T) {
+	client := getClient()
+	req := types.ItemDetailRequest{
+		ItemResource: "taobao",
+		ItemID:       "806339192392",
+		Language:     "en",
+	}
+	resp, err := client.Item.GetSourceItemDetail(req)
+	if err != nil {
+		log.Fatalf("❌ 商品详情获取失败: %v", err)
+	}
+	fmt.Printf("✅ 商品标题: %s, 优惠价: %.2f 元\n",
+		resp.Data.Title, float64(resp.Data.PromotionPrice)/100)
+}
+
+func getClient() *taobao.Client {
 	// 1. 加载 .env 文件
 	if err := godotenv.Load(); err != nil {
 		log.Println("⚠️ Warning: .env file not found, will use system environment variables")
@@ -48,15 +94,5 @@ func TestClientExecute(t *testing.T) {
 		},
 	}
 	client := taobao.NewClient(baseApi, appKey, appSecret, store)
-	req := types.ItemSearchRequest{
-		Keyword:  "bags",
-		PageNo:   1,
-		PageSize: 10,
-		Language: "en",
-	}
-	resp, err := client.Item.Search(req)
-	if err != nil {
-		log.Fatalf("❌ 商品搜索失败: %v", err)
-	}
-	fmt.Printf("✅ 搜索到 %d 条商品\n", len(resp.Data.Items))
+	return client
 }

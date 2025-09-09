@@ -143,7 +143,7 @@ func runOrderPreview(client *taobao.Client) {
 	if err != nil {
 		log.Fatalf("❌ 订单预览失败: %v", err)
 	}
-	fmt.Printf("✅ 订单预览成功: %+v\n", resp.Data)
+	fmt.Printf("✅ 订单预览成功: %+v\n", resp.Result)
 }
 
 // 创建采购单
