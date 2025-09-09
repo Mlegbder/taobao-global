@@ -31,78 +31,78 @@ type Address struct {
 
 // PurchaseOrderRenderResponse 订单预览响应
 type PurchaseOrderRenderResponse struct {
-	Result        RenderResult `json:"result"`
-	InnerErrorMsg string       `json:"inner_error_msg"`
-	Data          RenderData   `json:"data"`
+	Result RenderResult `json:"result"`
 }
 
-// RenderResult 渲染结果
+// RenderResult 结果集
 type RenderResult struct {
-	Success   bool   `json:"success"`
-	ErrorCode string `json:"error_code"`
-	ErrorMsg  string `json:"error_msg"`
-	FailItems string `json:"fail_items"`
+	InnerErrorMsg string `json:"inner_error_msg"` // 内部错误详细
+	Data          Data   `json:"data"`            // 业务数据
+	Success       bool   `json:"success"`         // 成功标
+	FailItems     string `json:"fail_items"`      // 失败商品
+	ErrorCode     string `json:"error_code"`      // 错误码
+	ErrorMsg      string `json:"error_msg"`       // 错误原因
 }
 
-// RenderData 订单预览数据
-type RenderData struct {
-	RenderItemList       []RenderItem         `json:"render_item_list"`
-	CurrencyCode         string               `json:"currency_code"`
-	DeliveryFee          int64                `json:"delivery_fee"`
-	SellerID             int64                `json:"seller_id"`
-	MainlandShippingFee  *Money               `json:"mainland_shipping_fee"`
-	OrderFee             *Money               `json:"order_fee"`
-	ChooseSupplyServices []SupplyChainService `json:"choose_supply_chain_services"`
-	UnavailableSkuList   []UnavailableSku     `json:"unavailable_sku_list"`
-	TotalRealPayPrice    *Money               `json:"total_real_pay_price"`
+// Data 业务数据
+type Data struct {
+	RenderItemList     []RenderItem     `json:"render_item_list"`     // 渲染订单列表
+	UnavailableSkuList []UnavailableSku `json:"unavailable_sku_list"` // 不可用商品及原因
+	TotalRealPayPrice  Price            `json:"total_real_pay_price"` // 实际支付总价
 }
 
-// RenderItem 渲染后的商品条目
+// RenderItem 渲染订单列表项
 type RenderItem struct {
-	Nick                  string      `json:"nick"`
-	ItemPriceInfos        []ItemPrice `json:"item_price_infos"`
-	DispatchPlace         string      `json:"dispatch_place"`
-	EstimatedDeliveryTime string      `json:"estimated_delivery_time"`
+	Nick                  string               `json:"nick"`                         // 商家昵称
+	ItemPriceInfos        []ItemPriceInfo      `json:"item_price_infos"`             // 商品价格信息列表
+	SellerID              int64                `json:"seller_id"`                    // 商家ID
+	MainlandShippingFee   Price                `json:"mainland_shipping_fee"`        // 国内物流费用
+	OrderFee              Price                `json:"order_fee"`                    // 当前订单费用
+	ChooseSupplyChainSvcs []SupplyChainService `json:"choose_supply_chain_services"` // 选择的供应链服务列表
+	DispatchPlace         string               `json:"dispatch_place"`               // 发货地
+	EstimatedDeliveryTime string               `json:"estimated_delivery_time"`      // 物流时效
+	CurrencyCode          string               `json:"currency_code"`                // 币种
+	DeliveryFee           int64                `json:"delivery_fee"`                 // 物流费用
 }
 
-// ItemPrice 商品价格信息
-type ItemPrice struct {
-	ItemID        int64  `json:"item_id"`
-	OriginPrice   *Money `json:"origin_price"`
-	Amount        *Money `json:"amount"`
-	Currency      string `json:"currency"`
-	SkuID         int64  `json:"sku_id"`
-	Quantity      int    `json:"quantity"`
-	DiscountPrice *Money `json:"discount_price"`
+// ItemPriceInfo 商品价格信息
+type ItemPriceInfo struct {
+	ItemID        int64 `json:"item_id"`        // 分销商品id
+	OriginPrice   Price `json:"origin_price"`   // 商品单价
+	SkuID         int64 `json:"sku_id"`         // 分销商品skuid
+	Quantity      int64 `json:"quantity"`       // 商品数量
+	DiscountPrice Price `json:"discount_price"` // 折扣后金额小记
 }
 
-// Money 通用金额结构
-type Money struct {
-	Amount   int64  `json:"amount"` // 单位分
-	Currency string `json:"currency"`
+// Price 金额结构
+type Price struct {
+	Amount   int64  `json:"amount"`   // 金额（分）
+	Currency string `json:"currency"` // 币种
 }
 
 // SupplyChainService 供应链服务
 type SupplyChainService struct {
-	Name            string        `json:"name"`
-	Description     string        `json:"description"`
-	OptionID        int64         `json:"option_id"`
-	IsMustSelect    bool          `json:"is_must_select"`
-	ServiceCategory string        `json:"service_category"`
-	ShippingFee     *Money        `json:"shipping_fee"`
-	ShippingTime    *ShippingTime `json:"shipping_time"`
+	ShippingFee     Price        `json:"shipping_fee"`     // 运费/服务费
+	Name            string       `json:"name"`             // 方案名称
+	Description     string       `json:"description"`      // 描述
+	OptionID        int64        `json:"option_id"`        // 服务方案id
+	IsMustSelect    bool         `json:"is_must_select"`   // 是否必选
+	ShippingTime    ShippingTime `json:"shipping_time"`    // 物流方案时间
+	ServiceCategory string       `json:"service_category"` // 服务类目
 }
 
-// ShippingTime 物流时效
+// ShippingTime 物流时间
 type ShippingTime struct {
-	Mode int `json:"mode"`
-	Min  int `json:"min"`
-	Max  int `json:"max"`
+	Mode int64 `json:"mode"` // 1 工作日 2 自然天
+	Min  int64 `json:"min"`  // 最短
+	Max  int64 `json:"max"`  // 最长
 }
 
-// UnavailableSku 不可用SKU信息
+// UnavailableSku 不可用商品信息
 type UnavailableSku struct {
-	ItemID int64  `json:"item_id"`
-	SkuID  int64  `json:"sku_id"`
-	Reason string `json:"reason"`
+	ItemID    int64  `json:"item_id"`    // 分销商品id
+	SkuID     int64  `json:"sku_id"`     // 分销商品skuid
+	Reason    string `json:"reason"`     // 失败原因
+	ErrorCode string `json:"error_code"` // 错误码
+	ErrorMsg  string `json:"error_msg"`  // 错误原因
 }
