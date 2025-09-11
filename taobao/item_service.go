@@ -160,7 +160,7 @@ func (s *ItemService) ImgSearch(req types.ImgSearchRequest) (*types.ImgSearchRes
 }
 
 // Translate 商品信息翻译
-func (s *ItemService) Translate(req types.ProductTranslateRequest) (*types.ProductTranslateResponse, error) {
+func (s *ItemService) Translate(req types.ProductTranslateRequest) (*types.ProductInfoTranResponse, error) {
 	params := map[string]string{
 		"access_token": s.client.getAccessToken(),
 		"item_id":      req.ItemID,
@@ -177,7 +177,7 @@ func (s *ItemService) Translate(req types.ProductTranslateRequest) (*types.Produ
 		return nil, err
 	}
 
-	var resp types.ProductTranslateResponse
+	var resp types.ProductInfoTranResponse
 	if err = json.Unmarshal(respBytes, &resp); err != nil {
 		return nil, err
 	}

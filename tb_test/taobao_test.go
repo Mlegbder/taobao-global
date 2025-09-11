@@ -32,7 +32,7 @@ func (m *MemoryTokenStore) LoadToken() (*types.TokenResponse, error) {
 func TestRunItemDetail(t *testing.T) {
 	client := getClient()
 	req := types.QueryAllProductRequest{
-		ItemID: "805577403719",
+		ItemID: "755475833284",
 	}
 	resp, err := client.Item.GetDetail(req)
 	if err != nil {
@@ -130,7 +130,7 @@ func TestRunCreateOrder(t *testing.T) {
 func TestRunQueryPurchaseOrders(t *testing.T) {
 	client := getClient()
 	req := types.QueryPurchaseOrdersRequest{
-		PurchaseIDS: []int64{200078283966}, // 采购单ID
+		PurchaseIDS: []int64{200077867837}, // 采购单ID
 		PageNo:      1,
 		PageSize:    10,
 	}
@@ -159,6 +159,66 @@ func TestRunQueryPurchaseOrders(t *testing.T) {
 	}
 }
 
+// 查询物流详情
+func TestRunLogisticsDetail(t *testing.T) {
+	client := getClient()
+	req := types.GetLogisticsDetailRequest{
+		PurchaseOrderLineID: 2912066688476065752,
+	}
+	resp, err := client.Logistics.GetDetail(req)
+	if err != nil {
+		log.Fatalf("❌ 查询采购单失败: %v", err)
+	}
+	fmt.Println(resp)
+}
+
+// 查询退款详情
+func TestRunQueryRefundOrder(t *testing.T) {
+	client := getClient()
+	req := types.QueryRefundOrderRequest{
+		RefundID: 110006829192,
+	}
+	resp, err := client.Order.QueryRefundOrder(req)
+	if err != nil {
+		log.Fatalf("❌ 查询退款单失败: %v", err)
+	}
+	fmt.Println(resp)
+}
+
+// 查询采购账单
+func TestRunQueryPurchaseBill(t *testing.T) {
+	client := getClient()
+	req := types.PurchaseBillRequest{
+		TimeType:  "paytime",
+		PageNo:    1,
+		PageSize:  10,
+		StartTime: 1756698588,
+		EndTime:   1757562605,
+	}
+	resp, err := client.Bill.PurchaseBill(req)
+	if err != nil {
+		log.Fatalf("❌ 查询采购账单失败: %v", err)
+	}
+	fmt.Println(resp)
+}
+
+// 查询退款账单
+func TestRunQueryRefundBill(t *testing.T) {
+	client := getClient()
+	req := types.RefundBillRequest{
+		PageNo:    "1",
+		PageSize:  "10",
+		StartTime: "1756698588",
+		EndTime:   "1757562605",
+	}
+	resp, err := client.Bill.RefundBill(req)
+	if err != nil {
+		log.Fatalf("❌ 查询退款账单失败: %v", err)
+	}
+	fmt.Println(resp)
+}
+
+// 获取客户端
 func getClient() *taobao.Client {
 	// 1. 加载 .env 文件
 	if err := godotenv.Load(); err != nil {

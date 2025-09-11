@@ -23,6 +23,7 @@ type Client struct {
 	Order     *OrderService
 	Logistics *LogisticsService
 	Upload    *UploadService
+	Bill      *BillService
 	mu        sync.Mutex // 🔒 控制刷新 token 的并发安全
 
 }
@@ -42,7 +43,7 @@ func NewClient(baseApi, appKey, appSecret string, tokenStore types.TokenStore) *
 	client.Order = &OrderService{client: client}
 	client.Logistics = &LogisticsService{client: client}
 	client.Upload = &UploadService{client: client}
-
+	client.Bill = &BillService{client: client}
 	return client
 }
 

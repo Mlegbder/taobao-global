@@ -54,3 +54,11 @@ type ProductSKU struct {
 	MpSkuID        int64             `json:"mp_skuId"`
 	PostFee        int64             `json:"postFee"`
 }
+
+type ProductProperty struct {
+	ValueID   int64  `json:"value_id"`   // 属性值id
+	ValueName string `json:"value_name"` // 属性值
+	ValueDesc string `json:"value_desc"` // 属性值+备注
+	PropID    int64  `json:"prop_id"`    // 属性id
+	PropName  string `json:"prop_name"`  // 属性名称
+}

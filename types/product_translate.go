@@ -6,45 +6,42 @@ type ProductTranslateRequest struct {
 	Language string `json:"language,omitempty"` // 可选: en/ru/ko/ja/vi (默认中文)
 }
 
-// ProductTranslateResponse 商品翻译响应
-type ProductTranslateResponse struct {
-	Result        *TranslateResult      `json:"result"`
-	InnerErrorMsg string                `json:"inner_error_msg"`
-	Data          *ProductTranslateData `json:"data"`
-	Success       bool                  `json:"success"`
-	FailItems     string                `json:"fail_items"`
-	ErrorCode     string                `json:"error_code"`
-	ErrorMsg      string                `json:"error_msg"`
+// ProductInfoTranResponse API: 商品信息翻译
+type ProductInfoTranResponse struct {
+	Result ProductInfoTranResult `json:"result"` // 结果集
 }
 
-// TranslateResult 通用结果
-type TranslateResult struct {
-	Success   bool   `json:"success"`
-	ErrorCode string `json:"error_code"`
-	ErrorMsg  string `json:"error_msg"`
+// ProductInfoTranResult 结果集
+type ProductInfoTranResult struct {
+	InnerErrorMsg string              `json:"inner_error_msg"` // 内部错误详情
+	Data          ProductInfoTranData `json:"data"`            // 业务结果
+	Success       bool                `json:"success"`         // 成功标
+	FailItems     string              `json:"fail_items"`      // 失败条目
+	ErrorCode     string              `json:"error_code"`      // 错误码
+	ErrorMsg      string              `json:"error_msg"`       // 错误信息
 }
 
-// ProductTranslateData 商品翻译数据
-type ProductTranslateData struct {
-	ItemID        string                 `json:"item_id"`
-	MainImage     string                 `json:"main_image"`
-	Language      string                 `json:"language"`
-	Title         string                 `json:"title"`
-	Properties    []ProductProperty      `json:"properties"`
-	SkuProperties []SkuTranslateProperty `json:"sku_properties"`
+// ProductInfoTranData 业务结果
+type ProductInfoTranData struct {
+	SkuProperties []TranSkuProperty `json:"sku_properties"` // sku属性对象
+	ItemID        string            `json:"item_id"`        // 铺货商品id
+	MainImage     string            `json:"main_image"`     // 商品主图
+	Language      string            `json:"language"`       // 返回的语种信息
+	Title         string            `json:"title"`          // 商品标题
+	Properties    []TranProperty    `json:"properties"`     // 属性对象
 }
 
-// ProductProperty 普通属性
-type ProductProperty struct {
-	PropID    int64  `json:"prop_id"`
-	PropName  string `json:"prop_name"`
-	ValueID   int64  `json:"value_id"`
-	ValueName string `json:"value_name"`
-	ValueDesc string `json:"value_desc"`
+// TranSkuProperty sku属性对象
+type TranSkuProperty struct {
+	SkuID      int64          `json:"sku_id"`     // skuId
+	Properties []TranProperty `json:"properties"` // 属性对象
 }
 
-// SkuTranslateProperty SKU 属性
-type SkuTranslateProperty struct {
-	SkuID      int64             `json:"sku_id"`
-	Properties []ProductProperty `json:"properties"`
+// TranProperty 属性对象
+type TranProperty struct {
+	ValueID   int64  `json:"value_id"`   // 属性值id
+	ValueName string `json:"value_name"` // 属性值
+	ValueDesc string `json:"value_desc"` // 属性值+备注
+	PropID    int64  `json:"prop_id"`    // 属性id
+	PropName  string `json:"prop_name"`  // 属性名称
 }

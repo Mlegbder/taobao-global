@@ -33,7 +33,7 @@ type PurchaseOrder struct {
 	Status                  string             `json:"status"`                          // 订单状态
 	OrderSource             string             `json:"order_source"`                    // 订单渠道来源
 	Receiver                Receiver           `json:"receiver"`                        // 收件人信息
-	PayTime                 string             `json:"pay_time"`                        // 支付成功时间
+	PayTime                 int64              `json:"pay_time"`                        // 支付成功时间
 	PurchaseID              int64              `json:"purchase_id"`                     // 采购单ID
 	DistributorNick         string             `json:"distributor_nick"`                // 分销商昵称
 	PurchaseCurrency        string             `json:"purchase_currency"`               // 采购金额币种
@@ -47,7 +47,7 @@ type PurchaseOrder struct {
 	HongbaoDeductionAmount  int64              `json:"hongbao_deduction_amount"`        // 优惠红包金额
 	SellerOrderNumber       string             `json:"seller_order_number"`             // ISV单号/平台单号
 	ModifyTime              int64              `json:"modify_time"`                     // 采购单修改时间
-	PayAmount               string             `json:"pay_amount"`                      // 支付金额
+	PayAmount               int64              `json:"pay_amount"`                      // 支付金额
 	DomesticPostFee         int64              `json:"domestic_post_fee"`               // 国内运费
 	SupplierNick            string             `json:"supplier_nick"`                   // 供应商昵称
 	CreatedTime             int64              `json:"created_time"`                    // 采购单创建时间
@@ -95,12 +95,12 @@ type SubPurchaseOrder struct {
 	LogisticCompanyName      string              `json:"logistic_company_name"`         // 过期字段: 物流公司
 	LogisticNumber           string              `json:"logistic_number"`               // 过期字段: 物流单号
 	Quantity                 int64               `json:"quantity"`                      // 商品数量
-	RtsTime                  string              `json:"rts_time"`                      // 过期字段: 发货时间
+	RtsTime                  int64               `json:"rts_time"`                      // 过期字段: 发货时间
 	Title                    string              `json:"title"`                         // 订单标题
 	PurchaseCurrency         string              `json:"purchase_currency"`             // 采购币种
 	PurchaseAmount           int64               `json:"purchase_amount"`               // 采购价格
 	ItemID                   string              `json:"item_id"`                       // 商品ID
-	PayAmount                string              `json:"pay_amount"`                    // 实际支付金额
+	PayAmount                int64               `json:"pay_amount"`                    // 实际支付金额
 	DomesticPostFee          int64               `json:"domestic_post_fee"`             // 一段物流费用
 }
 

@@ -105,15 +105,7 @@ func runItemTranslate(client *taobao.Client) {
 		log.Fatalf("❌ 商品翻译失败: %v", err)
 	}
 
-	if resp.Success && resp.Data != nil {
-		fmt.Printf("✅ 商品标题 (%s): %s\n", resp.Data.Language, resp.Data.Title)
-		for _, prop := range resp.Data.Properties {
-			fmt.Printf(" - %s: %s\n", prop.PropName, prop.ValueName)
-		}
-	} else {
-		fmt.Printf("❌ 翻译失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
-	}
-
+	fmt.Println(resp)
 }
 
 // 订单预览
@@ -240,19 +232,7 @@ func runGetLogisticsDetail(client *taobao.Client) {
 	if err != nil {
 		log.Fatalf("get logistics detail failed: %v", err)
 	}
-
-	if resp.Success {
-		fmt.Printf("✅ 当前物流状态: %s (%s)\n", resp.Data.LogisticsDesc, resp.Data.LogisticsStatus)
-		for _, pkg := range resp.Data.PnmLogisticsDetails {
-			fmt.Printf("📦 包裹单号: %s\n", pkg.MailNo)
-			for _, trace := range pkg.LogisticsTraces {
-				fmt.Printf("   [%s] %s - %s (%s)\n",
-					trace.Time, trace.Status, trace.StatusDesc, trace.City)
-			}
-		}
-	} else {
-		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
-	}
+	fmt.Println(resp)
 }
 
 // 查询采购单
@@ -329,30 +309,5 @@ func runImgSearch(client *taobao.Client) {
 		}
 	} else {
 		fmt.Println("未找到相关商品")
-	}
-}
-
-// 查询退款单
-func runQueryRefundOrder(client *taobao.Client) {
-	req := types.QueryRefundOrderRequest{
-		RefundID: 1234567890,
-	}
-
-	resp, err := client.Order.QueryRefundOrder(req)
-	if err != nil {
-		log.Fatalf("❌ 查询退款单失败: %v", err)
-	}
-
-	if resp.Success && resp.Data != nil {
-		fmt.Printf("✅ 退款单 %d 状态: %d\n", resp.Data.RefundOrder.RefundID, resp.Data.RefundOrder.RefundStatus)
-		fmt.Printf("退款金额: %.2f 元\n", float64(resp.Data.RefundOrder.RefundFee)/100)
-		if resp.Data.PurchaseOrderLine != nil {
-			fmt.Printf("商品: %s, 数量: %d\n",
-				resp.Data.PurchaseOrderLine.ItemTitle,
-				resp.Data.PurchaseOrderLine.Quantity,
-			)
-		}
-	} else {
-		fmt.Printf("❌ 查询失败: %s (%s)\n", resp.ErrorMsg, resp.ErrorCode)
 	}
 }
