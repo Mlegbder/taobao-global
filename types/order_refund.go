@@ -65,7 +65,7 @@ type RefundOrder struct {
 	SellerRefuseReason         string `json:"seller_refuse_reason"`          // 卖家拒绝退款申请的原因
 	RefundStatus               int    `json:"refund_status"`                 // 逆向状态
 	CanEditFee                 string `json:"can_edit_fee"`                  // 能否编辑退款金额
-	RemainingTime              string `json:"remaining_time"`                // 逆向剩余时间
+	RemainingTime              int64  `json:"remaining_time"`                // 逆向剩余时间
 	RefundType                 int    `json:"refund_type"`                   // 退款类型
 	FeeTips                    string `json:"fee_tips"`                      // 退款金额提示
 	RefundDesc                 string `json:"refund_desc"`                   // 退款原因模板描述

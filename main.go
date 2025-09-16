@@ -293,7 +293,7 @@ func runImageUpload(client *taobao.Client) {
 func runImgSearch(client *taobao.Client) {
 	// 用 image_id 搜索 (推荐：先调用 ImageUpload 上传图片获取 image_id)
 	req := types.ImgSearchRequest{
-		ImageID:  "1521908561144519126",
+		PicURL:   "https://womata-gr.oss-accelerate.aliyuncs.com/lianfei/1756290364/TRANS-O1CN015sGm5922HZ8MoAfT9_2212513067095-0-cib-f.jpg",
 		Language: "en",
 	}
 

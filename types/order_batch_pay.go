@@ -7,21 +7,25 @@ type BatchPayPurchaseOrderRequest struct {
 
 // BatchPayPurchaseOrderResponse 批量支付采购单响应
 type BatchPayPurchaseOrderResponse struct {
-	Data      *BatchPayResult `json:"data"`
-	Success   bool            `json:"success"`    // 是否成功
+	Code      string          `json:"code"`       // 响应状态码
+	Data      *BatchPayResult `json:"data"`       // 结果数据
+	Success   bool            `json:"success"`    // 是否成功（注意返回的是字符串 "true"/"false"）
 	ErrorCode string          `json:"error_code"` // 错误码
 	ErrorMsg  string          `json:"error_msg"`  // 错误信息
+	RequestID string          `json:"request_id"` // 请求 ID
 }
 
 // BatchPayResult 批量支付结果
 type BatchPayResult struct {
-	PayFailurePurchaseOrderIDs []int64         `json:"pay_failure_purchase_order_ids"` // 支付失败的主单ID
-	WillPayPurchaseOrderIDs    []int64         `json:"will_pay_purchase_order_ids"`    // 待支付的主单ID
+	PayFailurePurchaseOrderIDs []string        `json:"pay_failure_purchase_order_ids"` // 支付失败的主单ID
+	WillPayPurchaseOrderIDs    []string        `json:"will_pay_purchase_order_ids"`    // 待支付的主单ID
 	PayFailedResults           []PayFailedInfo `json:"pay_failed_results"`             // 支付失败明细
 }
 
 // PayFailedInfo 支付失败明细
 type PayFailedInfo struct {
-	PurchaseOrderID int64  `json:"purchase_order_id"`
-	Reason          string `json:"reason"`
+	GspOrderID   int64  `json:"gspOrderId"`   // GSP订单ID
+	ErrorMessage string `json:"errorMessage"` // 错误信息
+	ErrorCode    string `json:"errorCode"`    // 错误码
+	Class        string `json:"class"`        // Java类路径
 }

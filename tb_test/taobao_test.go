@@ -2,6 +2,7 @@ package tb_test
 
 import (
 	"fmt"
+	"github.com/Mlegbder/taobao-global/consts"
 	"github.com/Mlegbder/taobao-global/taobao"
 	"github.com/Mlegbder/taobao-global/types"
 	"github.com/joho/godotenv"
@@ -32,7 +33,7 @@ func (m *MemoryTokenStore) LoadToken() (*types.TokenResponse, error) {
 func TestRunItemDetail(t *testing.T) {
 	client := getClient()
 	req := types.QueryAllProductRequest{
-		ItemID: "755475833284",
+		ItemID: "731040994692",
 	}
 	resp, err := client.Item.GetDetail(req)
 	if err != nil {
@@ -42,14 +43,14 @@ func TestRunItemDetail(t *testing.T) {
 		resp.Data.Title, float64(resp.Data.PromotionPrice)/100)
 }
 
-// 商品详情
+// 商品搜索
 func TestRunItemSearch(t *testing.T) {
 	client := getClient()
 	req := types.ItemSearchRequest{
-		Keyword:  "bags",
 		PageNo:   1,
 		PageSize: 10,
 		Language: "en",
+		ShopID:   599014143,
 	}
 	resp, err := client.Item.Search(req)
 	if err != nil {
@@ -63,7 +64,7 @@ func TestRunSourceItemDetail(t *testing.T) {
 	client := getClient()
 	req := types.ItemDetailRequest{
 		ItemResource: "taobao",
-		ItemID:       "806339192392",
+		ItemID:       "731040994692",
 		Language:     "en",
 	}
 	resp, err := client.Item.GetSourceItemDetail(req)
@@ -72,6 +73,21 @@ func TestRunSourceItemDetail(t *testing.T) {
 	}
 	fmt.Printf("✅ 商品标题: %s, 优惠价: %.2f 元\n",
 		resp.Data.Title, float64(resp.Data.PromotionPrice)/100)
+}
+
+// 批量支付
+func TestRunBatchPay(t *testing.T) {
+	client := getClient()
+	req := types.BatchPayPurchaseOrderRequest{
+		PurchaseOrderIDList: []int64{200078851363}, //采购IDS
+	}
+
+	resp, err := client.Order.BatchPay(req)
+	if err != nil {
+		log.Fatalf("batch pay failed: %v", err)
+	}
+
+	fmt.Println(resp)
 }
 
 // 创建采购单
@@ -130,7 +146,7 @@ func TestRunCreateOrder(t *testing.T) {
 func TestRunQueryPurchaseOrders(t *testing.T) {
 	client := getClient()
 	req := types.QueryPurchaseOrdersRequest{
-		PurchaseIDS: []int64{200077867837}, // 采购单ID
+		PurchaseIDS: []int64{200078283966}, // 采购单ID
 		PageNo:      1,
 		PageSize:    10,
 	}
@@ -176,7 +192,7 @@ func TestRunLogisticsDetail(t *testing.T) {
 func TestRunQueryRefundOrder(t *testing.T) {
 	client := getClient()
 	req := types.QueryRefundOrderRequest{
-		RefundID: 110006829192,
+		RefundID: 110006916474,
 	}
 	resp, err := client.Order.QueryRefundOrder(req)
 	if err != nil {
@@ -189,11 +205,11 @@ func TestRunQueryRefundOrder(t *testing.T) {
 func TestRunQueryPurchaseBill(t *testing.T) {
 	client := getClient()
 	req := types.PurchaseBillRequest{
-		TimeType:  "paytime",
+		TimeType:  consts.TimeTypeCreate,
 		PageNo:    1,
 		PageSize:  10,
-		StartTime: 1756698588,
-		EndTime:   1757562605,
+		StartTime: 1756665600000,
+		EndTime:   1757529600000,
 	}
 	resp, err := client.Bill.PurchaseBill(req)
 	if err != nil {
@@ -208,14 +224,60 @@ func TestRunQueryRefundBill(t *testing.T) {
 	req := types.RefundBillRequest{
 		PageNo:    "1",
 		PageSize:  "10",
-		StartTime: "1756698588",
-		EndTime:   "1757562605",
+		StartTime: "1756665600000",
+		EndTime:   "1757529600000",
 	}
 	resp, err := client.Bill.RefundBill(req)
 	if err != nil {
 		log.Fatalf("❌ 查询退款账单失败: %v", err)
 	}
 	fmt.Println(resp)
+}
+
+// 图片上传
+func TestRunImageUpload(t *testing.T) {
+	client := getClient()
+	// 假设你已经把图片转成 Base64 字符串
+	imgBase64 := "iVBORw0KGgoAAAANSUhEUgAAA5QAAANbCAIAAACy6kd+AAAAC...."
+
+	req := types.ImageUploadRequest{
+		ImageBase64: imgBase64,
+	}
+
+	resp, err := client.Upload.Image(req)
+	if err != nil {
+		log.Fatalf("❌ 图片上传失败: %v", err)
+	}
+
+	if resp.Data != nil {
+		fmt.Printf("✅ 图片上传成功, ImageID: %s\n", resp.Data.ImageID)
+	} else {
+		fmt.Printf("❌ 上传失败: %s (%s)\n", resp.BizErrorMsg, resp.BizErrorCode)
+	}
+}
+
+// 图片搜索
+func TestRunImgSearch(t *testing.T) {
+	client := getClient()
+	// 用 image_id 搜索 (推荐：先调用 ImageUpload 上传图片获取 image_id)
+	req := types.ImgSearchRequest{
+		PicURL:   "https://womata-gr.oss-accelerate.aliyuncs.com/lianfei/1756290364/TRANS-O1CN015sGm5922HZ8MoAfT9_2212513067095-0-cib-f.jpg",
+		Language: "en",
+	}
+
+	resp, err := client.Item.ImgSearch(req)
+	if err != nil {
+		log.Fatalf("❌ 图片搜索失败: %v", err)
+	}
+
+	if len(resp.Data) > 0 {
+		fmt.Printf("✅ 找到 %d 个商品\n", len(resp.Data))
+		for _, item := range resp.Data {
+			fmt.Printf("- %s (ID: %d, 价格: %s 元)\n", item.Title, item.ItemID, item.Price)
+		}
+	} else {
+		fmt.Println("未找到相关商品")
+	}
 }
 
 // 获取客户端
